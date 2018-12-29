@@ -34,6 +34,13 @@ function init() {
 	 //socket = io.connect('http://localhost:9000');
 	 socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
       
+	 var tempData = {
+		 user: "jay357young@gmail.com",
+		 pass: "357young"
+	 }
+	 Postal.emit('Account Login',tempData);
+	  
+	  
 	 //add the output of the renderer to the html element
 	 
 	 
