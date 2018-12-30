@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	 <!-- Head -->
+	 <head>
+		 <title>Bendy</title>
+		 <meta charset="utf-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+		 <script type="text/javascript" src="application.js"></script>
+		 <link rel="stylesheet" type="text/css" href="bendy.css" />
+		 <!-- Bootstrap -->
+		 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 </head>
+	 <!-- Body -->
+	 <body>
+		 <!-- Header -->
+		 <header>Bendy PostCards:</header>
+		 <br>
+		 <div class = "container-fluid">
+			 <!-- User  inputs-->
+			 <div id="results"></div>
+			 Your Email Address <input type="text" id="yourEmailAddress"> <br>
+			 Your Email Address Password <input type="password" id="yourEmailAddressPassword"> <br>
+			 <button id="Login">Login</button>
+			 <br>
+			 <br>
+			 <canvas id="WebGL-output" align= "center" align="bottom"></canvas>
+			 <br>
+			 The Email Address of the person you want to send this Post Card<br>
+			 <input type="text" id="theirEmailAddress"> <button id="Send">Send</button>
+		 </div>
+		 <div id="like_button_container"></div>
+	 
+		 
+	 </body>	 
+</html>
