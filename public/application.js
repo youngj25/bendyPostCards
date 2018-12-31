@@ -1,6 +1,5 @@
 var socket, Postal = io('/postal', {forceNew:true});
 
-
 function init() {
 	 // SOCKETS - Incoming
 	 // socket = io.connect('http://localhost:9000');
@@ -10,15 +9,18 @@ function init() {
 	 Postal.on('Account Logged In', function(data) {
 		 document.getElementById("results").innerHTML = "You have successfully logged in";
 		 document.getElementById("results").style.color = "green";
+		 document.getElementById("yourEmailInfo").style.display = "none";
+		 document.getElementById("postCardCreator").style.display = "inline";
 	 });
 	 
 	 // An error has occured with the sending the Post Card
 	 Postal.on('Error', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.color = "red";
+		 document.getElementById("yourEmailInfo").style.display = "inline";
 	 });
 	  
-	 // An error has occured with the sending the Post Card
+	 // The PostCard has been sent
 	 Postal.on('Sent', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.color = "blue";
