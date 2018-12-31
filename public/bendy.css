@@ -1,10 +1,16 @@
 /*The Header CSS Styling*/
 header{
-	 padding: 0.25em;
+	 padding-top: 0.25em;
+	 padding-bottom: 0.25em;
 	 color:rgb(0,184,255);
 	 background-color: black;
 	 font-size:5vw;
 	 text-align: center;
+	 width: 100%;
+}
+
+body{
+	 background-color: darkgrey;
 }
 
 .webApplication{
