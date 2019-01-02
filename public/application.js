@@ -6,6 +6,15 @@ function init() {
 	 // socket = io.connect('http://localhost:9000');
 	 socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
       
+	 // Post Card Canvas
+	 var postCardCanvas = document.getElementById("postCardCanvas");
+	 var postCardCanvasContext = postCardCanvas.getContext("2d");
+	 // Post Card Tool Canvas
+	 var postCardToolsCanvas = document.getElementById("postCardToolsCanvas");
+	 var postCardToolsCanvasContext = postCardToolsCanvas.getContext("2d");
+	 
+	  
+	  
 	 //The user has successfully logged in
 	 Postal.on('Account Logged In', function(data) {
 		 document.getElementById("results").innerHTML = "You have successfully logged in";
@@ -30,28 +39,31 @@ function init() {
 	  
 	 //----------------------------------------------------------------------------
 	 
-	 
-	 
-	 var c = document.getElementById("postCardCanvas");
-	 var ctx = c.getContext("2d");
-	 //canvasHistory.push(c.toDataURL());
+	 //canvasHistory.push(postCardCanvas.toDataURL());
 	 canvasHistory.push(document.getElementById('postCardCanvas').toDataURL());
-	 // console.log(ctx);
-	 ctx.font = "20px Georgia";
-	 ctx.fillText("Hello World!", 10, 50);
-	 ctx.save();
-	 canvasHistory.push(ctx);
+	 // console.log(postCardCanvasContext);
+	 postCardCanvasContext.font = "20px Georgia";
+	 postCardCanvasContext.fillText("Hello World!", 10, 50);
+	 postCardCanvasContext.save();
+	 canvasHistory.push(postCardCanvasContext);
 	 
-	 ctx.font = "30px Verdana";	 
+	 postCardCanvasContext.font = "30px Verdana";	 
 	 // Create gradient
-	 var gradient = ctx.createLinearGradient(0, 0, c.width, 0);
+	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
 	 gradient.addColorStop("0", "Blue");
 	 gradient.addColorStop("0.5", "#850085");
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
-	 ctx.fillStyle = gradient;
-	 ctx.fillText("Goongala!!", c.width*0.2, c.height*0.65);
-	 //canvasHistory.push(ctx);
+	 postCardCanvasContext.fillStyle = gradient;
+	 postCardCanvasContext.fillText("Goongala!!", postCardCanvas.width*0.2, postCardCanvas.height*0.65);
+	 //canvasHistory.push(postCardCanvasContext);
+	 
+	 
+	 for (var toolCount = 0; toolCount < 8; toolCount++){
+		 postCardToolsCanvasContext.fillStyle = "white";
+		 postCardToolsCanvasContext.lineWidth = 3;
+		 postCardToolsCanvasContext.fillRect(12+35*toolCount, 10, 30, 130);		 
+	 }
 	 
 	 //----------------------------------------------------------------------------
 	 
@@ -62,18 +74,18 @@ function init() {
 			 var data = {
 				 subject: "Bendy Postal From Jason",
 				 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-				 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+c.toDataURL()+' alt="postCard">',
+				 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 			 }
 			 
 			 
 			 Postal.emit('Mail',data);
 			 console.log("mail");
-			 //ctx.clearRect(0, 0, c.width, c.height);
+			 //postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 		 }
 		 **/
-		 // ctx.restore();
+		 // postCardCanvasContext.restore();
 		 
-		 ctx.clearRect(0, 0, c.width, c.height);
+		 postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 		 
 		 //for(var history = 0; history <canvasHistory.length; history++)
 			 //canvasHistory[history].
@@ -82,7 +94,7 @@ function init() {
 		 var canvasPic = new Image();
          canvasPic.src = canvasHistory[0];
          canvasPic.onload = function () { 
-			 ctx.drawImage(canvasPic, 0, 0);
+			 postCardCanvasContext.drawImage(canvasPic, 0, 0);
 			 console.log("--");
 		 }
 		 
@@ -92,12 +104,23 @@ function init() {
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
 	 
-	 // On Click Functions
-	 function onButtonClick(){
+	 // On Click Functions for the PostCard Canvas
+	 function onCanvasButtonClick(){
 		 console.log("clicked");
 	 }
-	 c.addEventListener('click',onButtonClick, false);
+	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
+	 
+	 
+	 // On Click Functions for the PostCard Tools Canvas
+	 function onToolButtonClick(event){
+		 console.log(event);
+	 }
+	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
+	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
+	 
+	 
+	 
 	 
 	 // ----------------------------------------------------------------------------
 	 
@@ -128,7 +151,7 @@ function init() {
 			 receipt: document.getElementById("theirEmailAddress").value,
 			 subject: "Bendy Postal From Jason",
 			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+c.toDataURL()+' alt="postCard">',
+			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 		 }			 
 		
 		 Postal.emit('Mail',data);
