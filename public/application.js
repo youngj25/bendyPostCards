@@ -33,20 +33,19 @@ function init() {
 	 
 	 var c = document.getElementById("WebGL-output");
 	 var ctx = c.getContext("2d");
-
+	 console.log(ctx);
 	 ctx.font = "20px Georgia";
 	 ctx.fillText("Hello World!", 10, 50);
-
+	 // ctx.canvas.width
 	 ctx.font = "30px Verdana";
 	 // Create gradient
 	 var gradient = ctx.createLinearGradient(0, 0, c.width, 0);
-	 gradient.addColorStop("0", "#850085");
-	 gradient.addColorStop("0.25", "Orange");
-	 gradient.addColorStop("0.5", "Blue");
-	 gradient.addColorStop("0.75", "Red");
+	 gradient.addColorStop("0", "Blue");
+	 gradient.addColorStop("0.5", "#850085");
+	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
 	 ctx.fillStyle = gradient;
-	 ctx.fillText("Goongala!!!!", 10, 90);
+	 ctx.fillText("Goongala!!!!", ctx.canvas.width*0.2, ctx.canvas.height*0.6);
 	 
 	 
 	 //----------------------------------------------------------------------------
@@ -69,6 +68,14 @@ function init() {
 		 **/
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
+	 
+	 // On Click Functions
+	 function onButtonClick(){
+		 console.log("clicked");
+	 }
+	 c.addEventListener('click',onButtonClick, false);
+	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
+	 
 	 // ----------------------------------------------------------------------------
 	 
 	 // ... the starter code you pasted ...
@@ -104,5 +111,6 @@ function init() {
 		 Postal.emit('Mail',data);
 		 console.log("mail");
 	 });
+
 }
 window.onload = init;

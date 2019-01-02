@@ -38,18 +38,25 @@
 			 
 			 <!-- The Web Application -->
 			 <div id = "postCardCreator" class = "webApplication">
-				 <canvas id="WebGL-output" align= "center" align="bottom"></canvas>
 				 <br>
-				 <p>The Email Address of the person you want to send this Post Card</p>
+				 
+				 <!-- The Post Card Canvas -->
+				 <canvas id="WebGL-output"></canvas>
+				 
 				 <br>
-				 <input type="text" id="theirEmailAddress"> <button id="Send">Send</button>
-				 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+				 
+				 <!-- The Receipt Emails -->
+				 <div id="receiptEmail">
+					 <p>The Email Address of the person you want to send this Post Card</p>
+					 <input type="text" id="theirEmailAddress">
+					 <button id="Send">Send</button>
+					 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+				 </div>
+				 
 			 </div>
 			 
 			 
 		 </div>
-		 
-		 <div id="like_button_container"></div>
 	 
 		 
 	 </body>
