@@ -12,18 +12,17 @@
 		 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	 
-	 
-		 
 	 </head>
 	 
 	 <!-- Body -->
 	 <body>
 		 <!-- Header -->
-		 <header>Bendy PostCards:</header>
-		 
+		 <!--<header>Bendy PostCards:</header>-->
+		 <img id="title" src="title.png" alt="Italian Trulli" style ="">
+		 <!-- https://flamingtext.com/logo/Design-Crafts?_variations=true -->
 		 <br>
 		 <div id = "appContainer">
+		 
 			 <div id="results"></div>
 			 
 			 <!-- User  inputs-->			 
@@ -40,19 +39,21 @@
 			 
 			 <!-- The Web Application -->
 			 <div id = "postCardCreator" class = "webApplication">
-				 <canvas id="WebGL-output" align= "center" align="bottom"></canvas>
 				 <br>
-				 <p>The Email Address of the person you want to send this Post Card</p>
+				 <canvas id="WebGL-output"></canvas>
 				 <br>
-				 <input type="text" id="theirEmailAddress"> <button id="Send">Send</button>
-				 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+				 
+				 <div id = "receiptEmail">
+					 <p>The Email Address of the person you want to send this Post Card</p>
+				 	 <input type="text" id="theirEmailAddress">
+					 <button id="Send">Send</button>
+					 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+				 </div>
+				 
 			 </div>
 			 
 			 
 		 </div>
-		 
-		 <div id="like_button_container"></div>
-	 
 		 
 	 </body>
 	 
