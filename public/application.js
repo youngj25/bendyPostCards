@@ -1,4 +1,5 @@
 var socket, Postal = io('/postal', {forceNew:true});
+var canvasHistory = [];
 
 function init() {
 	 // SOCKETS - Incoming
@@ -33,11 +34,15 @@ function init() {
 	 
 	 var c = document.getElementById("WebGL-output");
 	 var ctx = c.getContext("2d");
-	 console.log(ctx);
+	 //canvasHistory.push(c.toDataURL());
+	 canvasHistory.push(document.getElementById('WebGL-output').toDataURL());
+	 // console.log(ctx);
 	 ctx.font = "20px Georgia";
 	 ctx.fillText("Hello World!", 10, 50);
-	 // ctx.canvas.width
-	 ctx.font = "30px Verdana";
+	 ctx.save();
+	 canvasHistory.push(ctx);
+	 
+	 ctx.font = "30px Verdana";	 
 	 // Create gradient
 	 var gradient = ctx.createLinearGradient(0, 0, c.width, 0);
 	 gradient.addColorStop("0", "Blue");
@@ -45,8 +50,8 @@ function init() {
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
 	 ctx.fillStyle = gradient;
-	 ctx.fillText("Goongala!!!!", ctx.canvas.width*0.2, ctx.canvas.height*0.6);
-	 
+	 ctx.fillText("Goongala!!", c.width*0.2, c.height*0.65);
+	 //canvasHistory.push(ctx);
 	 
 	 //----------------------------------------------------------------------------
 	 
@@ -66,6 +71,24 @@ function init() {
 			 //ctx.clearRect(0, 0, c.width, c.height);
 		 }
 		 **/
+		 // ctx.restore();
+		 
+		 ctx.clearRect(0, 0, c.width, c.height);
+		 
+		 //for(var history = 0; history <canvasHistory.length; history++)
+			 //canvasHistory[history].
+		 
+		 
+		 var canvasPic = new Image();
+         canvasPic.src = canvasHistory[0];
+         canvasPic.onload = function () { 
+			 ctx.drawImage(canvasPic, 0, 0);
+			 console.log("--");
+		 }
+		 
+		 
+		 console.log("erased");
+		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
 	 

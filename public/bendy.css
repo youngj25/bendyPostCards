@@ -10,13 +10,22 @@ header{
 	 top: 0%;
 }
 
+#title{
+	 max-width: 400px;
+	 width:90%;
+	 background-color: black;
+	 display:block;
+	 margin-left:auto;
+	 margin-right:auto;
+}
+
 body{
 	 background-color: black;
 }
 
 #appContainer{
-	 border: 3px solid rgb(0,0,95);
-	 background-color: rgb(155,155,255);
+	 border: 3px solid rgb(20,90,155);
+	 background-color: rgb(25,25,25);
 	 margin-left:auto;
 	 margin-right:auto;	
 }
@@ -49,17 +58,21 @@ canvas{
 	 margin-left:auto;
 	 margin-right:auto;	
 	 display:block;
+	 max-width: 500px;
 	 width: 75%;
-	 border: 3px solid black;
+	 border: 3px solid rgb(0,0,95);
 	 background-color: white;
 }
 
 #receiptEmail{
-	 border: 3px solid rgb(0,0,95);
+	 /* border: 3px solid rgb(0,0,95); */
 	 display:block;
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 80%;
 	 font: bold;
-	 color: rgb(100,255,20);
+	 font-weight: bold;
+	 font-size: calc(12px + 1vw);	
+	 /* https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
+	 color: rgb(130,115,220);
 }
