@@ -32,10 +32,10 @@ function init() {
 	 
 	 
 	 
-	 var c = document.getElementById("WebGL-output");
+	 var c = document.getElementById("postCardCanvas");
 	 var ctx = c.getContext("2d");
 	 //canvasHistory.push(c.toDataURL());
-	 canvasHistory.push(document.getElementById('WebGL-output').toDataURL());
+	 canvasHistory.push(document.getElementById('postCardCanvas').toDataURL());
 	 // console.log(ctx);
 	 ctx.font = "20px Georgia";
 	 ctx.fillText("Hello World!", 10, 50);
