@@ -1,18 +1,74 @@
 var socket, Postal = io('/postal', {forceNew:true});
 
 function init() {
-	 // SOCKETS - Incoming
+	
+	 // Sockets -------------------------------------------
 	 // socket = io.connect('http://localhost:9000');
 	 socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
-      
-	 // Post Card Canvas
+     
+	 // Incoming Sockets -------------------------------------------
+	 //The user has successfully logged in
+	 Postal.on('Account Logged In', function(data) {
+		 document.getElementById("results").innerHTML = "You have successfully logged in";
+		 document.getElementById("results").style.color = "green";
+		 document.getElementById("yourEmailInfo").style.display = "none";
+		 document.getElementById("postCardCreator").style.display = "inline";
+	 });
+	 
+	 // An error has occured with the sending the Post Card
+	 Postal.on('Error', function(data) {
+		 document.getElementById("results").innerHTML = data.message;
+		 document.getElementById("results").style.color = "red";
+		 document.getElementById("yourEmailInfo").style.display = "inline";
+	 });
+	  
+	 // The PostCard has been sent
+	 Postal.on('Sent', function(data) {
+		 document.getElementById("results").innerHTML = data.message;
+		 document.getElementById("results").style.color = "blue";
+	 });
+	  
+	 // Outgoing Sockets -------------------------------------------
+	 var emailAddress= "";
+	 
+	 // Retrieve the Information and Send it to the server for verification
+	 document.getElementById("Login").addEventListener("click", function(){
+		 emailAddress = document.getElementById("yourEmailAddress").value;
+		 var pass = document.getElementById("yourEmailAddressPassword").value;
+		 
+		 var tempData = {
+			 user: emailAddress,
+			 pass: pass
+		 }
+		 
+		 Postal.emit('Account Login',tempData);
+		 document.getElementById("yourEmailAddressPassword").innerHTML = null;
+		 //document.getElementById("yourEmailAddressPassword").innerHTML = "Hello World";
+		 console.log("sent")
+	 });
+	 
+	 // Send the Postcard to the server to be sent out
+	 document.getElementById("Send").addEventListener("click", function(){
+		 var data = {
+			 receipt: document.getElementById("theirEmailAddress").value,
+			 subject: "Bendy Postal From Jason",
+			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
+			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
+		 }			 
+		
+		 Postal.emit('Mail',data);
+		 console.log("mail");
+	 });
+
+
+	  
+	 // postCardCanvasContext - HTML5 Canvas --------------------------------------
+	 
+	 // Post Card Canvas - HTML5 Canvas
 	 var postCardCanvas = document.getElementById("postCardCanvas");
 	 var postCardCanvasContext = postCardCanvas.getContext("2d");
-	 // Post Card Tool Canvas
-	 var postCardToolsCanvas = document.getElementById("postCardToolsCanvas");
-	 var postCardToolsCanvasContext = postCardToolsCanvas.getContext("2d");
 	 
-	 /** Image History Array
+	  /** Image History Array
 		 The canvasHistory stores the previous History
 		 of the Canvas. This will be used for the Undo
 		 and the Redo buttons for this web application.
@@ -35,38 +91,13 @@ function init() {
 	 var canvasHistory = [], canvasHistoryPointer=-1;
 	 save_Canvas_Changes();
 	 
-	  
-	  
-	 //The user has successfully logged in
-	 Postal.on('Account Logged In', function(data) {
-		 document.getElementById("results").innerHTML = "You have successfully logged in";
-		 document.getElementById("results").style.color = "green";
-		 document.getElementById("yourEmailInfo").style.display = "none";
-		 document.getElementById("postCardCreator").style.display = "inline";
-	 });
-	 
-	 // An error has occured with the sending the Post Card
-	 Postal.on('Error', function(data) {
-		 document.getElementById("results").innerHTML = data.message;
-		 document.getElementById("results").style.color = "red";
-		 document.getElementById("yourEmailInfo").style.display = "inline";
-	 });
-	  
-	 // The PostCard has been sent
-	 Postal.on('Sent', function(data) {
-		 document.getElementById("results").innerHTML = data.message;
-		 document.getElementById("results").style.color = "blue";
-	 });
-	  
-	  
-	 //----------------------------------------------------------------------------
-	 
+	 // Hello World
 	 postCardCanvasContext.font = "20px Georgia";
 	 postCardCanvasContext.fillText("Hello World!", 10, 50);
 	 postCardCanvasContext.save();
-	 save_Canvas_Changes();
+	 save_Canvas_Changes();	 
 	 
-	 
+	 // Goongala
 	 postCardCanvasContext.font = "30px Verdana";	 
 	 // Create gradient
 	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
@@ -79,35 +110,86 @@ function init() {
 	 save_Canvas_Changes();
 	 
 	 
+	 // Post Card Tools Canvas - Three.js -------------------------------------------
+	 var postCardToolsCanvas = document.getElementById("postCardToolsCanvas");
+	 // create a scene, that will hold all our elements such as objects, cameras and lights.
+	 var scene = new THREE.Scene();
+	 // create a camera, which defines where we're looking at.
+	 var camera = new THREE.PerspectiveCamera(45, 800/ 500, 0.1, 1000);
+	 camera.position.set(0,0,20);
+	 camera.lookAt(scene.position);
+	 scene.background = new THREE.Color( 0x00D3FF );
+	 scene.add(camera);	
 	 
-	 for (var toolCount = 0; toolCount < 8; toolCount++){
-		 postCardToolsCanvasContext.fillStyle = "white";
-		 postCardToolsCanvasContext.lineWidth = 3;
-		 postCardToolsCanvasContext.fillRect(12+35*toolCount, 10, 30, 130);		 
+	 // create a render and set the size
+	 var renderer = new THREE.WebGLRenderer({ antialias: true} );
+	 renderer.setClearColor(new THREE.Color(0x000000, 0.0));
+	 //set the size
+	 //renderer.setSize(window.innerWidth*0.58, window.innerHeight*0.75);
+	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
+	
+	
+	
+	
+	 /** save Canvas Changes
+		 Saves the current state of the canvasHistory
+		 and increase the canvasHistoryPointer by one.
+		 In cases where the canvasHistoryPointer is
+		 less than the current canvasHistory.length, 
+		 then erase/splice everything greater than the
+		 canvasHistoryPointer and place the new state 
+		 at the end of the array and then increase the
+		 pointer.
+	 **/
+	 function save_Canvas_Changes(){
+		 canvasHistory.push(postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height));
+		 canvasHistoryPointer++;
 	 }
 	 
-	 var toolImgSendButton = new Image;
-	 //toolImg.src = "sendButton.png"
-	 toolImgSendButton.onload = function() {
-		postCardToolsCanvasContext.drawImage(toolImgSendButton, 257, 10, 30, 120);
-		
-		//alert('the image is drawn');
-	 }
-	 //toolImg.src = URL.createObjectURL(e.target.files[0]); 
-		toolImgSendButton.src = "sendButton.png";	 
-		 //https://stackoverflow.com/questions/6775767/how-can-i-draw-an-image-from-the-html5-file-api-on-canvas
+	 /** undo Canvas Changes
+		 This function will undo all of the changes
+		 made to the canvas and decrease the variable
+		 canvasHistoryPointer by one so that it will
+		 point at the current canvas state		 
+	 **/
+	 function undo_Canvas_Change(){
+		 if(canvasHistoryPointer >= 1){
+			 canvasHistoryPointer--;
+			 
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
 		 
-		
-	 var toolImgUndoButton = new Image;
-	 toolImgUndoButton.onload = function() {
-		 postCardToolsCanvasContext.drawImage(toolImgUndoButton, 12, 10, 30, 120);
+			 //console.log("undo");
+		 }
 	 }
-		 toolImgUndoButton.src = "undoButton.png";
-		
-		
-		
 	 
-	 //----------------------------------------------------------------------------
+	 /** redo Canvas Changes
+		 This function will redo all of the changes
+		 made to the canvas and increase the variable
+		 canvasHistoryPointer by one so that it will
+		 point at the current canvas state		 
+	 **/
+	 function redo_Canvas_Change(){
+		 if(canvasHistoryPointer+1 < canvasHistory.length){
+			 canvasHistoryPointer++;
+			 
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
+		 
+			 //console.log("redo");
+		 }
+	 }
+	 
+	 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	 // Event Section -------------------------------------------
 	 
 	 //Keyboard Functions
 	 function onKeyDown(event) {
@@ -159,8 +241,7 @@ function init() {
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
-	 
-	 
+	  
 	 // On Click Functions for the PostCard Tools Canvas
 	 function onToolButtonClick(event){
 		 var xPos = event.clientX - postCardToolsCanvas.offsetLeft;
@@ -197,92 +278,7 @@ function init() {
 	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 
-	 /** save Canvas Changes
-		 Saves the current state of the canvasHistory
-		 and increase the canvasHistoryPointer by one.
-		 In cases where the canvasHistoryPointer is
-		 less than the current canvasHistory.length, 
-		 then erase/splice everything greater than the
-		 canvasHistoryPointer and place the new state 
-		 at the end of the array and then increase the
-		 pointer.
-	 **/
-	 function save_Canvas_Changes(){
-		 canvasHistory.push(postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height));
-		 canvasHistoryPointer++;
-	 }
-	 
-	 /** undo Canvas Changes
-		 This function will undo all of the changes
-		 made to the canvas and decrease the variable
-		 canvasHistoryPointer by one so that it will
-		 point at the current canvas state		 
-	 **/
-	 function undo_Canvas_Change(){
-		 if(canvasHistoryPointer >= 1){
-			 canvasHistoryPointer--;
-			 
-			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
-		 
-			 //console.log("undo");
-		 }
-	 }
-	 
-	 /** redo Canvas Changes
-		 This function will redo all of the changes
-		 made to the canvas and increase the variable
-		 canvasHistoryPointer by one so that it will
-		 point at the current canvas state		 
-	 **/
-	 function redo_Canvas_Change(){
-		 if(canvasHistoryPointer+1 < canvasHistory.length){
-			 canvasHistoryPointer++;
-			 
-			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
-		 
-			 //console.log("redo");
-		 }
-	 }
 	 
 	 
-	 
-	 
-	 
-	 // ----------------------------------------------------------------------------
-	 
-	 // ... the starter code you pasted ...
-	 
-	 
-	 var emailAddress= "";
-	 
-	 // Retrieve the Information and Send it to the server for verification
-	 document.getElementById("Login").addEventListener("click", function(){
-		 emailAddress = document.getElementById("yourEmailAddress").value;
-		 var pass = document.getElementById("yourEmailAddressPassword").value;
-		 
-		 var tempData = {
-			 user: emailAddress,
-			 pass: pass
-		 }
-		 
-		 Postal.emit('Account Login',tempData);
-		 document.getElementById("yourEmailAddressPassword").innerHTML = null;
-		 //document.getElementById("yourEmailAddressPassword").innerHTML = "Hello World";
-		 console.log("sent")
-	 });
-	 
-	 // Send the Postcard to the server to be sent out
-	 document.getElementById("Send").addEventListener("click", function(){
-		 var data = {
-			 receipt: document.getElementById("theirEmailAddress").value,
-			 subject: "Bendy Postal From Jason",
-			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
-		 }			 
-		
-		 Postal.emit('Mail',data);
-		 console.log("mail");
-	 });
-
 }
 window.onload = init;
