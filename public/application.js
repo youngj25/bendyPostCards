@@ -27,6 +27,10 @@ function init() {
 		 'https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx'
 		 but was able to implement the method that this
 		 developer used.		 
+		 After seeing this the putImageData() function from
+		 https://www.w3schools.com/tags/canvas_putimagedata.asp
+		 then I realized I could make my own remake of the
+		 method the previous used.
 	 **/
 	 var canvasHistory = [], canvasHistoryPointer=-1;
 	 save_Canvas_Changes();
@@ -152,7 +156,36 @@ function init() {
 	 
 	 // On Click Functions for the PostCard Tools Canvas
 	 function onToolButtonClick(event){
-		 console.log(event);
+		 var xPos = event.clientX - postCardToolsCanvas.offsetLeft;
+		 //var yPos = event.clientY - postCardToolsCanvas.offsetTop;
+		 
+		 var found = false, button = -1;
+		 for (var x = 0; x< 8 && !found; x++)
+			 if((12+35*x)<=xPos && xPos<=(12+35*(x)+30)){
+				 found = true;
+				 button = x;
+			 }
+			 
+			 
+			 
+		 if( button == 0){
+			 console.log("Button 0 was pressed");
+			 undo_Canvas_Change();
+		 }
+		 else if( button == 1){
+			 console.log("Button 1 was pressed");
+			 redo_Canvas_Change();
+		 }
+		 else if( button == 2){
+			 console.log("Button 2 was pressed");
+		 }
+		 else if( button == 3){
+			 console.log("Button 3 was pressed");
+		 }
+		 else{
+			 console.log(xPos);
+			 console.log(event);
+		 }
 	 }
 	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
@@ -170,9 +203,6 @@ function init() {
 	 function save_Canvas_Changes(){
 		 canvasHistory.push(postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height));
 		 canvasHistoryPointer++;
-		 
-		 
-		 
 	 }
 	 
 	 /** undo Canvas Changes
@@ -187,7 +217,7 @@ function init() {
 			 
 			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
 		 
-			 console.log("undo");
+			 //console.log("undo");
 		 }
 	 }
 	 
@@ -203,11 +233,8 @@ function init() {
 			 
 			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
 		 
-			 console.log("redo");
+			 //console.log("redo");
 		 }
-		 
-		 
-		 
 	 }
 	 
 	 
