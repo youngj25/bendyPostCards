@@ -86,19 +86,26 @@ function init() {
 		 postCardToolsCanvasContext.fillRect(12+35*toolCount, 10, 30, 130);		 
 	 }
 	 
-	 var toolImg = new Image;
+	 var toolImgSendButton = new Image;
 	 //toolImg.src = "sendButton.png"
-	 toolImg.onload = function() {
-		postCardToolsCanvasContext.drawImage(toolImg, 257, 10, 30, 120);
+	 toolImgSendButton.onload = function() {
+		postCardToolsCanvasContext.drawImage(toolImgSendButton, 257, 10, 30, 120);
 		
 		//alert('the image is drawn');
 	 }
 	 //toolImg.src = URL.createObjectURL(e.target.files[0]); 
-		toolImg.src = "sendButton.png"	 
+		toolImgSendButton.src = "sendButton.png";	 
 		 //https://stackoverflow.com/questions/6775767/how-can-i-draw-an-image-from-the-html5-file-api-on-canvas
 		 
 		
-	 
+	 var toolImgUndoButton = new Image;
+	 toolImgUndoButton.onload = function() {
+		 postCardToolsCanvasContext.drawImage(toolImgUndoButton, 12, 10, 30, 120);
+	 }
+		 toolImgUndoButton.src = "undoButton.png";
+		
+		
+		
 	 
 	 //----------------------------------------------------------------------------
 	 
@@ -158,7 +165,7 @@ function init() {
 	 function onToolButtonClick(event){
 		 var xPos = event.clientX - postCardToolsCanvas.offsetLeft;
 		 //var yPos = event.clientY - postCardToolsCanvas.offsetTop;
-		 
+		 //https://eli.thegreenplace.net/2010/02/13/finding-out-the-mouse-click-position-on-a-canvas-with-javascript
 		 var found = false, button = -1;
 		 for (var x = 0; x< 8 && !found; x++)
 			 if((12+35*x)<=xPos && xPos<=(12+35*(x)+30)){
