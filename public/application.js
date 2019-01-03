@@ -132,9 +132,11 @@ function init() {
 		 
 		 //UNDO
 		 // /** 
-			 undo_Canvas_Change();
-		 
-			 //console.log("undo");
+			 if(event.keyCode == 38)
+				 undo_Canvas_Change();
+			 else if(event.keyCode == 40)
+				 redo_Canvas_Change();
+			 console.log(event.keyCode);
 		 // **/
 		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
@@ -196,7 +198,13 @@ function init() {
 		 point at the current canvas state		 
 	 **/
 	 function redo_Canvas_Change(){
+		 if(canvasHistoryPointer+1 < canvasHistory.length){
+			 canvasHistoryPointer++;
+			 
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
 		 
+			 console.log("redo");
+		 }
 		 
 		 
 		 
