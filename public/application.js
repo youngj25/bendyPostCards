@@ -59,11 +59,27 @@ function init() {
 	 //canvasHistory.push(postCardCanvasContext);
 	 
 	 
+	 
+	 
 	 for (var toolCount = 0; toolCount < 8; toolCount++){
 		 postCardToolsCanvasContext.fillStyle = "white";
 		 postCardToolsCanvasContext.lineWidth = 3;
 		 postCardToolsCanvasContext.fillRect(12+35*toolCount, 10, 30, 130);		 
 	 }
+	 
+	 var toolImg = new Image;
+	 //toolImg.src = "sendButton.png"
+	 toolImg.onload = function() {
+		postCardToolsCanvasContext.drawImage(toolImg, 257, 10, 30, 120);
+		
+		//alert('the image is drawn');
+	 }
+	 //toolImg.src = URL.createObjectURL(e.target.files[0]); 
+		toolImg.src = "sendButton.png"	 
+		 //https://stackoverflow.com/questions/6775767/how-can-i-draw-an-image-from-the-html5-file-api-on-canvas
+		 
+		
+	 
 	 
 	 //----------------------------------------------------------------------------
 	 
