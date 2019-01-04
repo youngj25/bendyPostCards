@@ -11,14 +11,17 @@
 		 <!-- Three.js -->
 		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js"></script>
 		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/libs/dat.gui.min.js"></script>
+		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/controls/OrbitControls.js"></script>
 		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/controls/DragControls.js"></script>
+		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/controls/TrackballControls.js"></script>
+		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/lights/RectAreaLightUniformsLib.js"></script>
 		 <!-- Bootstrap -->
 		 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		 <!-- P5.js -->
 		 <!-- https://p5js.org/get-started/ -->
-		 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+		 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script> -->
 	 </head>
 	 
 	 <!-- Body -->
@@ -47,7 +50,7 @@
 			 <div id = "postCardCreator" class = "webApplication">
 				 <br>
 				 <!-- The Post Card Tools Canvas -->
-				 <canvas id="postCardToolsCanvas"></canvas>
+				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
 				 <!-- The Post Card Canvas -->
 				 <canvas id="postCardCanvas"></canvas>

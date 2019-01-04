@@ -125,11 +125,25 @@ function init() {
 	 var renderer = new THREE.WebGLRenderer({ antialias: true} );
 	 renderer.setClearColor(new THREE.Color(0x000000, 0.0));
 	 //set the size
-	 //renderer.setSize(window.innerWidth*0.58, window.innerHeight*0.75);
+	 renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.25);
 	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
-	
-	
-	
+	 //postCardToolsCanvas.appendChild(renderer.domElement);
+	 //document.getElementById("WebGL-output").appendChild(renderer.domElement);
+	 renderer.render(scene, camera);
+	console.log(postCardToolsCanvas);
+	 renderScene();
+	 //drag_objects();
+	 
+	 
+	 // 
+	 function renderScene(){
+		 // Render steps
+		 // step = Math.round(1+step);
+		
+		 // render using requestAnimationFrame
+		 requestAnimationFrame(renderScene);
+		 renderer.render(scene, camera);
+	 }
 	
 	 /** save Canvas Changes
 		 Saves the current state of the canvasHistory
@@ -278,6 +292,16 @@ function init() {
 	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 
+	 //Window Resize Event
+	 function onWindowResize(){
+		 //renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.25);
+		 renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
+		 //camera.aspect = renderer.domElement.width/renderer.domElement.height;
+		 console.log(postCardToolsCanvas);
+		 console.log(document.getElementById("postCardToolsCanvas").style.width);
+		 console.log(document.getElementById("postCardToolsCanvas").style.border);
+	 }
+	 window.addEventListener('resize', onWindowResize, false);
 	 
 	 
 }
