@@ -130,10 +130,9 @@ function init() {
 	 //postCardToolsCanvas.appendChild(renderer.domElement);
 	 //document.getElementById("WebGL-output").appendChild(renderer.domElement);
 	 renderer.render(scene, camera);
-	console.log(postCardToolsCanvas);
 	 renderScene();
 	 //drag_objects();
-	 
+	 load_buttons();
 	 
 	 // 
 	 function renderScene(){
@@ -144,6 +143,16 @@ function init() {
 		 requestAnimationFrame(renderScene);
 		 renderer.render(scene, camera);
 	 }
+	
+	 /** Load Buttons
+	
+	 **/
+	 function load_buttons(){
+		 
+		 
+		 
+	 }
+	
 	
 	 /** save Canvas Changes
 		 Saves the current state of the canvasHistory
@@ -294,12 +303,15 @@ function init() {
 	 
 	 //Window Resize Event
 	 function onWindowResize(){
-		 //renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.25);
-		 renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
-		 //camera.aspect = renderer.domElement.width/renderer.domElement.height;
-		 console.log(postCardToolsCanvas);
-		 console.log(document.getElementById("postCardToolsCanvas").style.width);
-		 console.log(document.getElementById("postCardToolsCanvas").style.border);
+		 renderer.setSize(window.innerWidth*0.8, 100);
+		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
+		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
+		 // camera.aspect = renderer.domElement.width/renderer.domElement.height;
+		 //console.log(renderer);
+		 //console.log(postCardToolsCanvas);
+		 //console.log(document.getElementById("postCardToolsCanvas").style.width);
+		 //console.log(document.getElementById("postCardToolsCanvas").element);
+		 //console.log(document.getElementById("postCardToolsCanvas").style.border);
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
 	 

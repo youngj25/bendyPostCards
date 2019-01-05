@@ -39,6 +39,12 @@ body{
 	 margin-right:auto;	
 }
 
+canvas{
+	 width: 75%;
+	 overflow: hidden;
+}
+
+
 #yourEmailInfo{
 	 background-color: grey;
 	 display:none;
@@ -59,10 +65,11 @@ body{
 	 margin-right:auto;	
 	 display:block;
 	 max-width: 500px;
-	 height: calc(20px + 1vw);	
-	 width: 75%;
+	 height: calc(20px + 0.01vw);	
+	 /* width: 75%; */
 	 border: 3px solid rgb(0,0,95);
 	 /* background-color: rgb(95,95,195); */
+	 overflow: hidden;
 }
 
 #postCardCanvas{
