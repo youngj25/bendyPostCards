@@ -116,22 +116,42 @@ function init() {
 	 var scene = new THREE.Scene();
 	 // create a camera, which defines where we're looking at.
 	 var camera = new THREE.PerspectiveCamera(45, 800/ 500, 0.1, 1000);
-	 camera.position.set(0,0,20);
+	 camera.position.set(0,0,25);
 	 camera.lookAt(scene.position);
 	 scene.background = new THREE.Color( 0x00D3FF );
 	 scene.add(camera);	
+	 //console.log(camera);	
 	 
 	 // create a render and set the size
 	 var renderer = new THREE.WebGLRenderer({ antialias: true} );
 	 renderer.setClearColor(new THREE.Color(0x000000, 0.0));
 	 //set the size
-	 renderer.setSize(window.innerWidth*0.7, window.innerHeight*0.25);
+	 renderer.setSize(postCardToolsCanvas.innerWidth, 100);
 	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
 	 //postCardToolsCanvas.appendChild(renderer.domElement);
 	 //document.getElementById("WebGL-output").appendChild(renderer.domElement);
 	 renderer.render(scene, camera);
+	 //renderer.domElement.clientTop=renderer.domElement.clientHeight/2;
+	 console.log(renderer);	
+	 console.log("domElement");	
+	 console.log(renderer.domElement);	
+	 console.log(renderer.domElement.width);	
+	 renderer.domElement.width=100;	
+	 renderer.domElement.height=20;	
+	 console.log(renderer.domElement.height);	
+	 console.log("style");	
+	 console.log(renderer.domElement.style);	
+	 renderer.domElement.style = "height: 80px; cursor: auto;"	
+	 console.log(renderer.domElement.style[0]);	
+	 console.log("scene");	
+	 console.log(scene);	
+	 
+	 var buttons = [];
+	 var objects = [];
 	 renderScene();
-	 //drag_objects();
+	 drag_objects();
+	 
+	 
 	 load_buttons();
 	 
 	 // 
@@ -144,13 +164,48 @@ function init() {
 		 renderer.render(scene, camera);
 	 }
 	
+	
+	 
 	 /** Load Buttons
 	
 	 **/
 	 function load_buttons(){
+		 //Load Title
+		 var loader = new THREE.TextureLoader();
+		 loader.crossOrigin = true;
 		 
 		 
+		 var T = loader.load( 'Images/undoButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 var T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var undoButton = new THREE.Sprite(T1);			
+		 scene.add(undoButton);
+		 undoButton.posX = -4;
+		 undoButton.posY =  6;
+		 undoButton.posZ = -5;
+		 undoButton.position.set(undoButton.posX, undoButton.posY, undoButton.posZ);
+		 undoButton.scale.set(3, 3, 1);
+		 undoButton.name = "undo";	
+		 undoButton.type = "button";	
+		 buttons.push(undoButton);
+		 objects.push(undoButton);
 		 
+		 var T = loader.load( 'Images/redoButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 var T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var redoButton = new THREE.Sprite(T1);			
+		 scene.add(redoButton);
+		 redoButton.posX = 0;
+		 redoButton.posY =  0;
+		 redoButton.posZ = -10;
+		 redoButton.position.set(redoButton.posX, redoButton.posY, redoButton.posZ);
+		 redoButton.scale.set(100, 100, 1);
+		 redoButton.name = "redo";	
+		 redoButton.type = "button";	
+		 buttons.push(redoButton);
+		 objects.push(redoButton);
+		 
+		 console.log("buttons loaded.");
 	 }
 	
 	
@@ -265,6 +320,8 @@ function init() {
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	  
+	  
+	 /**
 	 // On Click Functions for the PostCard Tools Canvas
 	 function onToolButtonClick(event){
 		 var xPos = event.clientX - postCardToolsCanvas.offsetLeft;
@@ -294,26 +351,56 @@ function init() {
 			 console.log("Button 3 was pressed");
 		 }
 		 else{
+			 
 			 console.log(xPos);
 			 console.log(event);
 		 }
 	 }
 	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
+	 **/
+	 
 	 
 	 //Window Resize Event
 	 function onWindowResize(){
-		 renderer.setSize(window.innerWidth*0.8, 100);
+		 renderer.setSize(postCardToolsCanvas.innerWidth, 100);
 		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
 		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
-		 // camera.aspect = renderer.domElement.width/renderer.domElement.height;
-		 //console.log(renderer);
-		 //console.log(postCardToolsCanvas);
-		 //console.log(document.getElementById("postCardToolsCanvas").style.width);
-		 //console.log(document.getElementById("postCardToolsCanvas").element);
-		 //console.log(document.getElementById("postCardToolsCanvas").style.border);
+		 //camera.aspect = renderer.domElement.width/renderer.domElement.height;
+		 //camera.aspect = document.innerWidth/100;
+		 //camera.updateProjectionMatrix();
+		 
+		 //for ( var x = 0; x<buttons.length; x++){
+			 //buttons[x].position.set(buttons[x].posX, buttons[x].posY, buttons[x].posZ);
+		 //}
+		 renderer.domElement.width=100;	
+		 renderer.domElement.height=20;	
+		 
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
+	 
+	 //Make Objects Draggable - Additionally used as buttons
+	 function drag_objects(){
+		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
+				
+			 dragControls.addEventListener( 'dragstart', function(event) {
+																			 if (event.object.name == "undo")
+																				  undo_Canvas_Change();
+																			 else if (event.object.name == "redo")
+																				  redo_Canvas_Change();
+																			 //console.log(event);
+																		 });
+																		 
+			 dragControls.addEventListener( 'drag', function(event)   {
+																			 if (event.object.type == "button")
+																				 event.object.position.set(event.object.posX, event.object.posY, event.object.posZ);
+																			 });
+																		
+			 dragControls.addEventListener( 'dragend', function(event)   { });
+																		 
+			 //console.log(dragControls);
+			 //https://www.learnthreejs.com/drag-drop-dragcontrols-mouse/
+	 }
 	 
 	 
 }
