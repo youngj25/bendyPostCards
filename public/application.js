@@ -89,29 +89,32 @@ function init() {
 		 method the previous used.
 	 **/
 	 var canvasHistory = [], canvasHistoryPointer=-1;
-	 save_Canvas_Changes();
-	 
+	 // Save the initial state
+	 var history = {
+		 type:"Image",
+		 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
+	 }
+	 canvasHistory.push(history);
+	 canvasHistoryPointer++;
+ 
 	 // Hello World
-	 postCardCanvasContext.font = "20px Georgia";
-	 postCardCanvasContext.fillText("Hello World!", 10, 50);
-	 postCardCanvasContext.save();
-	 save_Canvas_Changes();	 
+	 create_Text("Hello World!","20px Georgia", "Black", 10, 50);
+	 
 	 
 	 // Goongala
-	 postCardCanvasContext.font = "30px Verdana";	 
+	 //postCardCanvasContext.font = "30px Verdana";	 
 	 // Create gradient
 	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
 	 gradient.addColorStop("0", "Blue");
 	 gradient.addColorStop("0.5", "#850085");
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
-	 postCardCanvasContext.fillStyle = gradient;
-	 postCardCanvasContext.fillText("Mwahahahaha!!", postCardCanvas.width*0.2, postCardCanvas.height*0.65);
-	 create_Text("Mwahahahaha!!", gradient);
+	 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
 	 
-	 postCardCanvasContext.fillStyle = "#FF0000";
-	 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
-	 save_Canvas_Changes();
+	 
+	 //postCardCanvasContext.fillStyle = "#FF0000";
+	 //postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
+	 //create_Fill_Image("#FF0000");
 	 
 	 
 	 
@@ -200,7 +203,6 @@ function init() {
 		 redoButton.posY =  6.5;
 		 redoButton.posZ = 0;
 		 redoButton.position.set(redoButton.posX, redoButton.posY, redoButton.posZ);
-		 //redoButton.position.set(0, 0, 0);
 		 redoButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
 		 redoButton.name = "redo";	
 		 redoButton.type = "button";	
@@ -208,7 +210,21 @@ function init() {
 		 buttons.push(redoButton);
 		 objects.push(redoButton);
 		 
-		 
+		 // Background Button
+		 T = loader.load( 'Images/backgroundButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var backgroundButton = new THREE.Sprite(T1);				 
+		 backgroundButton.posX = -5;
+		 backgroundButton.posY =  6.5;
+		 backgroundButton.posZ = 0;
+		 backgroundButton.position.set(backgroundButton.posX, backgroundButton.posY, backgroundButton.posZ);
+		 backgroundButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
+		 backgroundButton.name = "background";	
+		 backgroundButton.type = "button";	
+		 scene.add(backgroundButton);
+		 buttons.push(backgroundButton);
+		 objects.push(backgroundButton);
 		 
 		 
 		 //var planeGeometry = new THREE.PlaneBufferGeometry (105, 240,0);
@@ -275,29 +291,59 @@ function init() {
 		 I will be saving the text image and the actual
 		 text data into the history. 
 	 **/
-	 function create_Text(text, fillStyle){
+	 function create_Text(text,font, fillStyle, xCord, yCord){		 
+		 // Add Text to Canvas
+		 postCardCanvasContext.fillStyle = fillStyle;
+		 postCardCanvasContext.font = font;	 
+		 postCardCanvasContext.fillText(text, xCord, yCord);		 
+		 postCardCanvasContext.save();
+		 
+		 // Add data into History
 		 var history = {
-			 type:"Text",
-			 text:text,
-			 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
-		 }
+			 type: "Text",
+			 text: text,
+			 font: font,
+			 fillStyle: fillStyle,
+			 xCord: xCord,
+			 yCord: yCord,
+			 image: postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
+		 }		 		 
+		 
 		 canvasHistory.push(history);
 		 canvasHistoryPointer++;		
 	 }
 	 
-	 /** create Image
+	 /** create Fill Image
 		 Since images suchs as the canvas color and/or
 		 the Canvas can be changed at anytime. I need a
 		 way to make it dynamic/flexible.
 	 **/
-	 function create_Image(){
+	 function create_Fill_Image(fillStyle){
+		 // First we must go back to the inital state and change the background Color		 
+		 postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
+		 
+		 // Now we will set the right background color
+		 postCardCanvasContext.fillStyle = fillStyle;
+		 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
+		 
+		 // Now we'll proceed to follow the changes until the current one
+		 for(var x = 1; x< canvasHistory.length; x++)
+			 if(canvasHistory[x].type = "text"){
+				 // Now recreate the text
+				 //postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
+				 console.log(canvasHistory[x].text);
+				 postCardCanvasContext.fillStyle = canvasHistory[x].fillStyle;
+				 postCardCanvasContext.font = canvasHistory[x].font;	 
+				 postCardCanvasContext.fillText(canvasHistory[x].text, canvasHistory[x].xCord, canvasHistory[x].yCord);	
+			 
+			 }
+		 
 		 var history = {
 			 type:"Image",
 			 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
 		 }
 		 canvasHistory.push(history);
-		 canvasHistoryPointer++;
-		 
+		 canvasHistoryPointer++;		 
 	 }
 	
 	
@@ -339,7 +385,8 @@ function init() {
 		 
 		 if(event.keyCode == 38){
 			 //undo_Canvas_Change();
-			 // console.log(event.keyCode);
+			 create_Fill_Image("#FF0000");
+			 console.log("Up arrow- turn blue");
 		 }
 		 else if(event.keyCode == 40){
 			 //redo_Canvas_Change();				 
@@ -405,18 +452,9 @@ function init() {
 	 // Window Resize Event
 	 function onWindowResize(){
 		 renderer.setSize(window.innerWidth*.7, 50);
-		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
-		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
-		 //camera.aspect = renderer.domElement.width/renderer.domElement.height;
-		 //camera.aspect = document.innerWidth/100;
-		 //camera.updateProjectionMatrix();
-		 
 		 //for ( var x = 0; x<buttons.length; x++){
 			 //buttons[x].position.set(buttons[x].posX, buttons[x].posY, buttons[x].posZ);
 		 // }
-		 //renderer.domElement.width=100;	
-		 //renderer.domElement.height=20;	
-		 
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
 	 
@@ -426,9 +464,11 @@ function init() {
 				
 			 dragControls.addEventListener( 'dragstart', function(event) {
 																			 if (event.object.name == "undo")
-																				  undo_Canvas_Change();
+																				     undo_Canvas_Change();
 																			 else if (event.object.name == "redo")
-																				  redo_Canvas_Change();
+																				     redo_Canvas_Change();
+																			 else if (event.object.name == "background")
+																				     create_Fill_Image("#2255AF");
 																			 //console.log(event);
 																		 });
 																		 
