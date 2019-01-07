@@ -115,57 +115,42 @@ function init() {
 	 // create a scene, that will hold all our elements such as objects, cameras and lights.
 	 var scene = new THREE.Scene();
 	 // create a camera, which defines where we're looking at.
-	 var camera = new THREE.PerspectiveCamera(45, 800/ 500, 0.1, 1000);
-	 camera.position.set(0,0,25);
+	 var camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
+	 camera.position.set(0,0,53);
 	 camera.lookAt(scene.position);
-	 scene.background = new THREE.Color( 0x00D3FF );
+	 // camera.lookAt(new THREE.Vector3(0,-8,0));
+	 scene.background = new THREE.Color( 0x20233F );
 	 scene.add(camera);	
-	 //console.log(camera);	
+	 // renderer.setSize(Width, Height);
+	 camera.aspect = window.innerWidth/window.innerHeight;
 	 
-	 // create a render and set the size
 	 var renderer = new THREE.WebGLRenderer({ antialias: true} );
+	 // create a render and set the size	 
 	 renderer.setClearColor(new THREE.Color(0x000000, 0.0));
-	 //set the size
-	 renderer.setSize(postCardToolsCanvas.innerWidth, 100);
-	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
-	 //postCardToolsCanvas.appendChild(renderer.domElement);
-	 //document.getElementById("WebGL-output").appendChild(renderer.domElement);
+	 // set the size
+	 renderer.setSize( window.innerWidth*.7, 50);	 
 	 renderer.render(scene, camera);
-	 //renderer.domElement.clientTop=renderer.domElement.clientHeight/2;
-	 console.log(renderer);	
-	 console.log("domElement");	
-	 console.log(renderer.domElement);	
-	 console.log(renderer.domElement.width);	
-	 renderer.domElement.width=100;	
-	 renderer.domElement.height=20;	
-	 console.log(renderer.domElement.height);	
-	 console.log("style");	
-	 console.log(renderer.domElement.style);	
-	 renderer.domElement.style = "height: 80px; cursor: auto;"	
-	 console.log(renderer.domElement.style[0]);	
-	 console.log("scene");	
-	 console.log(scene);	
 	 
+	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
+	  
 	 var buttons = [];
 	 var objects = [];
 	 renderScene();
 	 drag_objects();
+	 load_buttons(); 
 	 
 	 
-	 load_buttons();
-	 
-	 // 
+	 // Rendering
 	 function renderScene(){
-		 // Render steps
-		 // step = Math.round(1+step);
-		
-		 // render using requestAnimationFrame
-		 requestAnimationFrame(renderScene);
-		 renderer.render(scene, camera);
+		 try{
+			 //Render steps
+			 //render using requestAnimationFrame
+			 requestAnimationFrame(renderScene);
+			 renderer.render(scene, camera);
+			 //scene.traverse(function (e) {});
+		 }catch(e){}
 	 }
 	
-	
-	 
 	 /** Load Buttons
 	
 	 **/
@@ -181,8 +166,8 @@ function init() {
 		 var undoButton = new THREE.Sprite(T1);			
 		 scene.add(undoButton);
 		 undoButton.posX = -4;
-		 undoButton.posY =  6;
-		 undoButton.posZ = -5;
+		 undoButton.posY =  7;
+		 undoButton.posZ = 30;
 		 undoButton.position.set(undoButton.posX, undoButton.posY, undoButton.posZ);
 		 undoButton.scale.set(3, 3, 1);
 		 undoButton.name = "undo";	
@@ -190,25 +175,38 @@ function init() {
 		 buttons.push(undoButton);
 		 objects.push(undoButton);
 		 
-		 var T = loader.load( 'Images/redoButton.png' );
+		 T = loader.load( 'Images/redoButton.png' );
 		 T.minFilter = THREE.LinearFilter;
-		 var T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
 		 var redoButton = new THREE.Sprite(T1);			
-		 scene.add(redoButton);
+		 
 		 redoButton.posX = 0;
-		 redoButton.posY =  0;
-		 redoButton.posZ = -10;
+		 redoButton.posY =  15;
+		 redoButton.posZ = -2;
 		 redoButton.position.set(redoButton.posX, redoButton.posY, redoButton.posZ);
-		 redoButton.scale.set(100, 100, 1);
+		 //redoButton.position.set(0, 0, 0);
+		 redoButton.scale.set(5, 5, 1);
 		 redoButton.name = "redo";	
 		 redoButton.type = "button";	
+		 scene.add(redoButton);
 		 buttons.push(redoButton);
 		 objects.push(redoButton);
 		 
+		 
+		 
+		 
+		 //var planeGeometry = new THREE.PlaneBufferGeometry (105, 240,0);
+		 //var planeMaterial = new THREE.MeshBasicMaterial({color: 0x000000}); //RGB
+		 //var Board = new THREE.Mesh(planeGeometry, planeMaterial);
+		 //Board.position.set(0,0,-152.4); //xyz
+		 //scene.add(Board);
+		 
+		 
+		 
+		 
 		 console.log("buttons loaded.");
 	 }
-	
-	
+		
 	 /** save Canvas Changes
 		 Saves the current state of the canvasHistory
 		 and increase the canvasHistoryPointer by one.
@@ -263,10 +261,6 @@ function init() {
 	
 	
 	
-	
-	
-	
-	
 	 // Event Section -------------------------------------------
 	 
 	 //Keyboard Functions
@@ -284,7 +278,7 @@ function init() {
 			 console.log("mail");
 			 //postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 		 }
-		 **/
+		 //
 		 // postCardCanvasContext.restore();
 		 
 		 //postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
@@ -292,7 +286,7 @@ function init() {
 		 //for(var history = 0; history <canvasHistory.length; history++)
 			 //canvasHistory[history].
 		 
-		 /**
+		 // 
 		 var canvasPic = new Image();
          canvasPic.src = canvasHistory[0];
          canvasPic.onload = function () { 
@@ -301,14 +295,24 @@ function init() {
 		 }
 		 **/
 		 
-		 //UNDO
-		 // /** 
-			 if(event.keyCode == 38)
-				 undo_Canvas_Change();
-			 else if(event.keyCode == 40)
-				 redo_Canvas_Change();
-			 console.log(event.keyCode);
-		 // **/
+		 // UNDO
+		 if(event.keyCode == 38){
+			 undo_Canvas_Change();
+			 // console.log(event.keyCode);
+		 }
+		 // REDO
+		 else if(event.keyCode == 40){
+			 redo_Canvas_Change();				 
+			 // console.log(event.keyCode);
+		 }
+		 // Are you there
+		 else if(event.keyCode == 32){
+			 
+			 if(scene.getObjectByName('gsButton') == null)
+				 console.log("NOT HERE !!!!")
+			 else
+				 console.log("it's there....")
+		 }
 		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
@@ -361,9 +365,9 @@ function init() {
 	 **/
 	 
 	 
-	 //Window Resize Event
+	 // Window Resize Event
 	 function onWindowResize(){
-		 renderer.setSize(postCardToolsCanvas.innerWidth, 100);
+		 renderer.setSize(window.innerWidth*.7, 50);
 		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
 		 // renderer.setSize(document.getElementById("postCardToolsCanvas").style.width, postCardToolsCanvas.Height);
 		 //camera.aspect = renderer.domElement.width/renderer.domElement.height;
@@ -372,14 +376,14 @@ function init() {
 		 
 		 //for ( var x = 0; x<buttons.length; x++){
 			 //buttons[x].position.set(buttons[x].posX, buttons[x].posY, buttons[x].posZ);
-		 //}
-		 renderer.domElement.width=100;	
-		 renderer.domElement.height=20;	
+		 // }
+		 //renderer.domElement.width=100;	
+		 //renderer.domElement.height=20;	
 		 
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
 	 
-	 //Make Objects Draggable - Additionally used as buttons
+	 // Make Objects Draggable - Additionally used as buttons
 	 function drag_objects(){
 		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
 				
