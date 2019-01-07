@@ -106,8 +106,24 @@ function init() {
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
 	 postCardCanvasContext.fillStyle = gradient;
-	 postCardCanvasContext.fillText("Goongala!!", postCardCanvas.width*0.2, postCardCanvas.height*0.65);
+	 postCardCanvasContext.fillText("Mwahahahaha!!", postCardCanvas.width*0.2, postCardCanvas.height*0.65);
+	 create_Text("Mwahahahaha!!", gradient);
+	 
+	 postCardCanvasContext.fillStyle = "#FF0000";
+	 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 	 save_Canvas_Changes();
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 // Post Card Tools Canvas - Three.js -------------------------------------------
@@ -116,10 +132,10 @@ function init() {
 	 var scene = new THREE.Scene();
 	 // create a camera, which defines where we're looking at.
 	 var camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
-	 camera.position.set(0,0,53);
+	 camera.position.set(0,0,25);
 	 camera.lookAt(scene.position);
 	 // camera.lookAt(new THREE.Vector3(0,-8,0));
-	 scene.background = new THREE.Color( 0x20233F );
+	 scene.background = new THREE.Color( 0x23233F );
 	 scene.add(camera);	
 	 // renderer.setSize(Width, Height);
 	 camera.aspect = window.innerWidth/window.innerHeight;
@@ -159,33 +175,33 @@ function init() {
 		 var loader = new THREE.TextureLoader();
 		 loader.crossOrigin = true;
 		 
-		 
+		 // Undo Button
 		 var T = loader.load( 'Images/undoButton.png' );
 		 T.minFilter = THREE.LinearFilter;
 		 var T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
 		 var undoButton = new THREE.Sprite(T1);			
 		 scene.add(undoButton);
-		 undoButton.posX = -4;
-		 undoButton.posY =  7;
-		 undoButton.posZ = 30;
+		 undoButton.posX = -9;
+		 undoButton.posY =  6.5;
+		 undoButton.posZ = 0;
 		 undoButton.position.set(undoButton.posX, undoButton.posY, undoButton.posZ);
-		 undoButton.scale.set(3, 3, 1);
+		 undoButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
 		 undoButton.name = "undo";	
 		 undoButton.type = "button";	
 		 buttons.push(undoButton);
 		 objects.push(undoButton);
 		 
+		 // Redo Button
 		 T = loader.load( 'Images/redoButton.png' );
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
-		 var redoButton = new THREE.Sprite(T1);			
-		 
-		 redoButton.posX = 0;
-		 redoButton.posY =  15;
-		 redoButton.posZ = -2;
+		 var redoButton = new THREE.Sprite(T1);				 
+		 redoButton.posX = -7;
+		 redoButton.posY =  6.5;
+		 redoButton.posZ = 0;
 		 redoButton.position.set(redoButton.posX, redoButton.posY, redoButton.posZ);
 		 //redoButton.position.set(0, 0, 0);
-		 redoButton.scale.set(5, 5, 1);
+		 redoButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
 		 redoButton.name = "redo";	
 		 redoButton.type = "button";	
 		 scene.add(redoButton);
@@ -232,7 +248,7 @@ function init() {
 		 if(canvasHistoryPointer >= 1){
 			 canvasHistoryPointer--;
 			 
-			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
 		 
 			 //console.log("undo");
 		 }
@@ -248,15 +264,41 @@ function init() {
 		 if(canvasHistoryPointer+1 < canvasHistory.length){
 			 canvasHistoryPointer++;
 			 
-			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer], 0, 0);
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
 		 
 			 //console.log("redo");
 		 }
 	 }
 	 
+	 /** create Text
+		 Since text implementation is a tricky area
+		 I will be saving the text image and the actual
+		 text data into the history. 
+	 **/
+	 function create_Text(text, fillStyle){
+		 var history = {
+			 type:"Text",
+			 text:text,
+			 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
+		 }
+		 canvasHistory.push(history);
+		 canvasHistoryPointer++;		
+	 }
 	 
-	
-	
+	 /** create Image
+		 Since images suchs as the canvas color and/or
+		 the Canvas can be changed at anytime. I need a
+		 way to make it dynamic/flexible.
+	 **/
+	 function create_Image(){
+		 var history = {
+			 type:"Image",
+			 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
+		 }
+		 canvasHistory.push(history);
+		 canvasHistoryPointer++;
+		 
+	 }
 	
 	
 	
@@ -295,23 +337,18 @@ function init() {
 		 }
 		 **/
 		 
-		 // UNDO
 		 if(event.keyCode == 38){
-			 undo_Canvas_Change();
+			 //undo_Canvas_Change();
 			 // console.log(event.keyCode);
 		 }
-		 // REDO
 		 else if(event.keyCode == 40){
-			 redo_Canvas_Change();				 
+			 //redo_Canvas_Change();				 
 			 // console.log(event.keyCode);
 		 }
 		 // Are you there
 		 else if(event.keyCode == 32){
 			 
-			 if(scene.getObjectByName('gsButton') == null)
-				 console.log("NOT HERE !!!!")
-			 else
-				 console.log("it's there....")
+			 console.log("ideal width: "+(window.innerWidth*.7));
 		 }
 		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
