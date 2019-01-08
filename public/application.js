@@ -100,9 +100,6 @@ function init() {
 	 // Hello World
 	 create_Text("Hello World!","20px Georgia", "Black", 10, 50);
 	 
-	 
-	 // Goongala
-	 //postCardCanvasContext.font = "30px Verdana";	 
 	 // Create gradient
 	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
 	 gradient.addColorStop("0", "Blue");
@@ -110,12 +107,6 @@ function init() {
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
 	 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
-	 
-	 
-	 //postCardCanvasContext.fillStyle = "#FF0000";
-	 //postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
-	 //create_Fill_Image("#FF0000");
-	 
 	 
 	 
 	 
@@ -321,13 +312,13 @@ function init() {
 	 function create_Fill_Image(fillStyle){
 		 // First we must go back to the inital state and change the background Color		 
 		 postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
-		 
+		 console.log(fillStyle);
 		 // Now we will set the right background color
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 		 
 		 // Now we'll proceed to follow the changes until the current one
-		 for(var x = 1; x< canvasHistory.length; x++)
+		 for(var x = 1; x< canvasHistoryPointer+1; x++)
 			 if(canvasHistory[x].type = "text"){
 				 // Now recreate the text
 				 //postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
@@ -335,8 +326,11 @@ function init() {
 				 postCardCanvasContext.fillStyle = canvasHistory[x].fillStyle;
 				 postCardCanvasContext.font = canvasHistory[x].font;	 
 				 postCardCanvasContext.fillText(canvasHistory[x].text, canvasHistory[x].xCord, canvasHistory[x].yCord);	
-			 
 			 }
+		 
+		 // Splice the canvasHistory
+		 canvasHistory.splice(canvasHistoryPointer+1);
+		 
 		 
 		 var history = {
 			 type:"Image",
@@ -409,6 +403,21 @@ function init() {
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	  
 	  
+	  
+	 //document.getElementById("foo").addEventListener("onClick", create_Fill_Image('#'+document.getElementById("foo").value));  
+	 
+	 document.getElementById("foo").addEventListener("onchange", myFunction);
+
+	 function myFunction() {
+	     console.log('#'+document.getElementById("foo").jscolor.valueElement.value);
+	     console.log(this.jscolor.valueElement.value);
+		 create_Fill_Image('#'+document.getElementById("foo").jscolor.valueElement.value);
+	 }
+	 
+	 
+	 
+	 
+	 
 	 /**
 	 // On Click Functions for the PostCard Tools Canvas
 	 function onToolButtonClick(event){
@@ -467,8 +476,23 @@ function init() {
 																				     undo_Canvas_Change();
 																			 else if (event.object.name == "redo")
 																				     redo_Canvas_Change();
-																			 else if (event.object.name == "background")
-																				     create_Fill_Image("#2255AF");
+																			 else if (event.object.name == "background"){
+																				     //create_Fill_Image("#2255AF");
+																					 console.log(document.getElementById("foo").jscolor);
+																					 //document.getElementById("foo").jscolor.valueElement.show();
+																					 document.getElementById('foo').jscolor.hide();
+																					 //document.getElementById("foo").jscolor.valueElement.show();
+																					 //document.getElementById('foo').jscolor.show();
+																					 //console.log(document.getElementById('foo').value)
+																			 
+																					 //var input = document.createElement('INPUT')
+																					 //var picker = new jscolor(input)
+																					 //picker.fromHSV(360 / 100, 100, 100)
+																				     
+																					 //document.getElementById('foo').appendChild(input)
+																			 
+																			 
+																			 }
 																			 //console.log(event);
 																		 });
 																		 

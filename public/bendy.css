@@ -72,6 +72,30 @@ canvas{
 	 overflow: hidden;
 }
 
+#foo{
+	 margin-left:auto;
+	 margin-right:auto;	
+	 display:hide;
+}
+
+#colorCanvas{
+	 margin-left:auto;
+	 margin-right:auto;	
+	 display:block;
+	 border: 3px solid rgb(0,0,95);
+	 width: 75%;
+	 background-image: linear-gradient(to right,
+		 #000000,
+		 #ff0000,
+		 #f39c12,
+		 #ffff00,
+		 #00ff00,
+		 #0000ff,
+		 #ff00ff,
+		 #ffffff);
+	
+}
+
 #postCardCanvas{
 	 margin-left:auto;
 	 margin-right:auto;	
