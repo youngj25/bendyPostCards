@@ -37,7 +37,7 @@
 			 <div id="results"></div>
 			 
 			 <!-- User  inputs-->			 
-			 <div id ="yourEmailInfo" class = "webApplication">
+			 <div id ="yourEmailInfo">
 				 <h4>Please enter your email info to use the Post Card Creator</h4>
 				 <!-- Email Address -->
 				 <p>Your Email Address:</p>
@@ -45,7 +45,7 @@
 				 <!-- Password -->
 				 <p>Your Email Address's Password:</p>
 				 <input type="password" id="yourEmailAddressPassword" placeholder="Password"  required> <br>
-				 <button id="Login">Login</button>
+				 <!-- <button id="Login">Login</button> -->
 			 </div>
 			 
 			 <!-- The Web Application -->
@@ -54,12 +54,11 @@
 				 <!-- The Post Card Tools Canvas -->
 				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
-				 <input id="foo" class="jscolor {closable:true,closeText:'Close me!'}" value="cc4499">
+				 <input id="colorCanvas" class="jscolor {closable:true,closeText:'Close me!'}" value="cc4499">
 				 
 				 <!-- The Post Card Canvas -->
 				 <canvas id="postCardCanvas"> </canvas>
 				 
-				 <br>
 				 
 				 <!-- The Receipt Emails -->
 				 <div id="receiptEmail">
@@ -67,6 +66,7 @@
 					 <input type="text" id="theirEmailAddress">
 					 <button id="Send">Send</button>
 					 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+					 
 				 </div>
 				 
 			 </div>

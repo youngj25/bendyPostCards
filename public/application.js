@@ -217,6 +217,22 @@ function init() {
 		 buttons.push(backgroundButton);
 		 objects.push(backgroundButton);
 		 
+		 // Send Button
+		 T = loader.load( 'Images/sendButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var sendButton = new THREE.Sprite(T1);				 
+		 sendButton.posX = 9;
+		 sendButton.posY =  6.5;
+		 sendButton.posZ = 0;
+		 sendButton.position.set(sendButton.posX, sendButton.posY, sendButton.posZ);
+		 sendButton.scale.set(2.5+ 1 - 287/(window.innerWidth*.7), 7, 1);
+		 sendButton.name = "send";	
+		 sendButton.type = "button";	
+		 scene.add(sendButton);
+		 buttons.push(sendButton);
+		 objects.push(sendButton);
+		 
 		 
 		 //var planeGeometry = new THREE.PlaneBufferGeometry (105, 240,0);
 		 //var planeMaterial = new THREE.MeshBasicMaterial({color: 0x000000}); //RGB
@@ -402,62 +418,6 @@ function init() {
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	  
-	  
-	  
-	 //document.getElementById("foo").addEventListener("onClick", create_Fill_Image('#'+document.getElementById("foo").value));  
-	 
-	 document.getElementById("foo").addEventListener("onchange", myFunction);
-
-	 function myFunction() {
-	     console.log('#'+document.getElementById("foo").jscolor.valueElement.value);
-	     console.log(this.jscolor.valueElement.value);
-		 create_Fill_Image('#'+document.getElementById("foo").jscolor.valueElement.value);
-	 }
-	 
-	 
-	 
-	 
-	 
-	 /**
-	 // On Click Functions for the PostCard Tools Canvas
-	 function onToolButtonClick(event){
-		 var xPos = event.clientX - postCardToolsCanvas.offsetLeft;
-		 //var yPos = event.clientY - postCardToolsCanvas.offsetTop;
-		 //https://eli.thegreenplace.net/2010/02/13/finding-out-the-mouse-click-position-on-a-canvas-with-javascript
-		 var found = false, button = -1;
-		 for (var x = 0; x< 8 && !found; x++)
-			 if((12+35*x)<=xPos && xPos<=(12+35*(x)+30)){
-				 found = true;
-				 button = x;
-			 }
-			 
-			 
-			 
-		 if( button == 0){
-			 console.log("Button 0 was pressed");
-			 undo_Canvas_Change();
-		 }
-		 else if( button == 1){
-			 console.log("Button 1 was pressed");
-			 redo_Canvas_Change();
-		 }
-		 else if( button == 2){
-			 console.log("Button 2 was pressed");
-		 }
-		 else if( button == 3){
-			 console.log("Button 3 was pressed");
-		 }
-		 else{
-			 
-			 console.log(xPos);
-			 console.log(event);
-		 }
-	 }
-	 postCardToolsCanvas.addEventListener('click',onToolButtonClick, false);
-	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
-	 **/
-	 
-	 
 	 // Window Resize Event
 	 function onWindowResize(){
 		 renderer.setSize(window.innerWidth*.7, 50);
@@ -473,25 +433,17 @@ function init() {
 				
 			 dragControls.addEventListener( 'dragstart', function(event) {
 																			 if (event.object.name == "undo")
-																				     undo_Canvas_Change();
+																				 undo_Canvas_Change();
 																			 else if (event.object.name == "redo")
-																				     redo_Canvas_Change();
+																				 redo_Canvas_Change();
 																			 else if (event.object.name == "background"){
-																				     //create_Fill_Image("#2255AF");
-																					 console.log(document.getElementById("foo").jscolor);
-																					 //document.getElementById("foo").jscolor.valueElement.show();
-																					 document.getElementById('foo').jscolor.hide();
-																					 //document.getElementById("foo").jscolor.valueElement.show();
-																					 //document.getElementById('foo').jscolor.show();
-																					 //console.log(document.getElementById('foo').value)
-																			 
-																					 //var input = document.createElement('INPUT')
-																					 //var picker = new jscolor(input)
-																					 //picker.fromHSV(360 / 100, 100, 100)
-																				     
-																					 //document.getElementById('foo').appendChild(input)
-																			 
-																			 
+																				 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
+																			 }
+																			 else if (event.object.name == "send"){
+																				 document.getElementById("yourEmailInfo").style.display = "block";
+																				 document.getElementById("receiptEmail").style.display = "block";
+																				 document.getElementById("colorCanvas").style.display = "none";
+																				 document.getElementById("postCardToolsCanvas").style.display = "none";
 																			 }
 																			 //console.log(event);
 																		 });
