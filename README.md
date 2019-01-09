@@ -20,7 +20,7 @@ What Operating System (+ service pack) and libraries are required
 
 Any design decisions or behavioral clarifications that illustrate how you program functions and why
 
-
+The initial plans were for the user to enter an email address and password, then for the server to validate/send a test email to the specificed email address prior to letting the user access the Post Card creator. However, after developing the web application, it became apparent that this idea was flawed and it would be best to leave the web application itself easily acessible, then when the user wants to send the postcard have them input the following information. However, the user will still have to provide a working email address and password to get access to an email postcard history.
 
 
 If you use any external libraries or code-snippets, you must provide the following information for each (credit must be given to others):
@@ -29,6 +29,21 @@ If you use any external libraries or code-snippets, you must provide the followi
   - Purpose
   - License
   - Websites
+  
+  -jsColor
+  -Version: 2.0.5
+  -Purpose: Canvas/Text Color Selection
+  -License: GNU GPL license v3
+  -Websites: http://jscolor.com/
+  
+  -Three.js
+  -Version: r83
+  -Purpose: Canvas Toolbar
+  -License: MIT License
+  -Websites: http://threejs.org/
+  
+  
+  
   
 What tools/libraries(and versions) are necessary to use and test your application
   - Node.js/Express.js

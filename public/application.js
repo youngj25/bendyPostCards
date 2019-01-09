@@ -159,7 +159,7 @@ function init() {
 			 //render using requestAnimationFrame
 			 requestAnimationFrame(renderScene);
 			 renderer.render(scene, camera);
-			 //scene.traverse(function (e) {});
+			 scene.traverse(function (e) {});
 		 }catch(e){}
 	 }
 	
@@ -203,7 +203,7 @@ function init() {
 		 var loader = new THREE.TextureLoader();
 		 loader.crossOrigin = true;
 		 
-		 // Undo Button
+		 // 0 - Undo Button
 		 var T = loader.load( 'Images/undoButton.png' );
 		 T.minFilter = THREE.LinearFilter;
 		 var T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
@@ -219,10 +219,10 @@ function init() {
 		 buttons.push(undoButton);
 		 objects.push(undoButton);
 		 
-		 // Redo Button
+		 // 1 - Redo Button
 		 T = loader.load( 'Images/redoButton.png' );
 		 T.minFilter = THREE.LinearFilter;
-		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0x575757 } );
 		 var redoButton = new THREE.Sprite(T1);				 
 		 redoButton.posX = -7;
 		 redoButton.posY =  6.5;
@@ -235,7 +235,7 @@ function init() {
 		 buttons.push(redoButton);
 		 objects.push(redoButton);
 		 
-		 // Background Button
+		 // 2 - Background Button
 		 T = loader.load( 'Images/backgroundButton.png' );
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
@@ -267,16 +267,6 @@ function init() {
 		 buttons.push(sendButton);
 		 objects.push(sendButton);
 		 
-		 
-		 //var planeGeometry = new THREE.PlaneBufferGeometry (105, 240,0);
-		 //var planeMaterial = new THREE.MeshBasicMaterial({color: 0x000000}); //RGB
-		 //var Board = new THREE.Mesh(planeGeometry, planeMaterial);
-		 //Board.position.set(0,0,-152.4); //xyz
-		 //scene.add(Board);
-		 
-		 
-		 
-		 
 		 console.log("buttons loaded.");
 	 }
 		
@@ -302,13 +292,21 @@ function init() {
 		 point at the current canvas state		 
 	 **/
 	 function undo_Canvas_Change(){
+		 // Checks to see whether the we can go back one step
 		 if(canvasHistoryPointer >= 1){
 			 canvasHistoryPointer--;
-			 
 			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
-		 
-			 //console.log("undo");
 		 }
+		 
+		 // If we can't go back any further then change the color of the undo button
+		 if(canvasHistoryPointer <= 0){
+			 // Button 0 - the Undo Button
+			 buttons[0].material.color.setHex(0x575757);
+		 }
+		 // Otherwise this means that we can can assume that now we have a space to go
+		 // forward. For this reason, new we'll set the button 1 (The redo button)
+		 // color back to normal
+		 else buttons[1].material.color.setHex(0xffffff);
 	 }
 	 
 	 /** redo Canvas Changes
@@ -318,13 +316,21 @@ function init() {
 		 point at the current canvas state		 
 	 **/
 	 function redo_Canvas_Change(){
+		 // Checks to see whether the we can go forward one step
 		 if(canvasHistoryPointer+1 < canvasHistory.length){
 			 canvasHistoryPointer++;
-			 
 			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
-		 
-			 //console.log("redo");
 		 }
+		 
+		 // If we can't go forward any further then change the color of the redo button
+		 if(canvasHistoryPointer+1 >= canvasHistory.length){
+			 // Button 1 - the Redo Button
+			 buttons[1].material.color.setHex(0x575757);
+		 }
+		 // Otherwise this means that we can can assume that now we have a space to go
+		 // backwards. For this reason, new we'll set the button 0 (The Undo Button)
+		 // color back to normal
+		 else buttons[0].material.color.setHex(0xffffff);
 	 }
 	 
 	 /** create Text
@@ -362,7 +368,7 @@ function init() {
 	 function create_Fill_Image(fillStyle){
 		 // First we must go back to the inital state and change the background Color		 
 		 postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
-		 console.log(fillStyle);
+		 // console.log(fillStyle);
 		 // Now we will set the right background color
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
@@ -371,8 +377,8 @@ function init() {
 		 for(var x = 1; x< canvasHistoryPointer+1; x++)
 			 if(canvasHistory[x].type = "text"){
 				 // Now recreate the text
-				 //postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
-				 console.log(canvasHistory[x].text);
+				 // postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
+				 // console.log(canvasHistory[x].text);
 				 postCardCanvasContext.fillStyle = canvasHistory[x].fillStyle;
 				 postCardCanvasContext.font = canvasHistory[x].font;	 
 				 postCardCanvasContext.fillText(canvasHistory[x].text, canvasHistory[x].xCord, canvasHistory[x].yCord);	
@@ -380,6 +386,9 @@ function init() {
 		 
 		 // Splice the canvasHistory
 		 canvasHistory.splice(canvasHistoryPointer+1);
+		 // Reset the Buttons
+		 buttons[0].material.color.setHex(0xffffff);
+		 buttons[1].material.color.setHex(0x575757);
 		 
 		 
 		 var history = {
@@ -429,8 +438,8 @@ function init() {
 		 
 		 if(event.keyCode == 38){
 			 //undo_Canvas_Change();
-			 create_Fill_Image("#FF0000");
-			 console.log("Up arrow- turn blue");
+			 //create_Fill_Image("#FF0000");
+			 //console.log("Up arrow- turn blue");
 		 }
 		 else if(event.keyCode == 40){
 			 //redo_Canvas_Change();				 
@@ -439,18 +448,19 @@ function init() {
 		 // Are you there
 		 else if(event.keyCode == 32){
 			 
-			 console.log("ideal width: "+(window.innerWidth*.7));
+			 //console.log("ideal width: "+(window.innerWidth*.7));
 		 }
 		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
 	 
-	 // On Click Functions for the PostCard Canvas
+	 /** On Click Functions for the PostCard Canvas
 	 function onCanvasButtonClick(){
 		 console.log("clicked");
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
 	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
+	 **/
 	  
 	 // Window Resize Event
 	 function onWindowResize(){
