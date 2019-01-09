@@ -37,20 +37,10 @@
 			 <div id="results"></div>
 			 
 			 <!-- User  inputs-->			 
-			 <div id ="yourEmailInfo">
-				 <h4>Please enter your email info to use the Post Card Creator</h4>
-				 <!-- Email Address -->
-				 <p>Your Email Address:</p>
-				 <input type="email" id="yourEmailAddress" placeholder="Email Address" required autofocus> <br>
-				 <!-- Password -->
-				 <p>Your Email Address's Password:</p>
-				 <input type="password" id="yourEmailAddressPassword" placeholder="Password"  required> <br>
-				 <!-- <button id="Login">Login</button> -->
-			 </div>
 			 
 			 <!-- The Web Application -->
 			 <div id = "postCardCreator" class = "webApplication">
-				 <br>
+				 <button id="go_Back_Button">Go Back</button>
 				 <!-- The Post Card Tools Canvas -->
 				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
@@ -62,7 +52,17 @@
 				 
 				 <!-- The Receipt Emails -->
 				 <div id="receiptEmail">
-					 <p>The Email Address of the person you want to send this Post Card</p>
+					 <h4>Please fill out the following information to send this Post Card</h4>
+					 <!-- Email Address -->
+					 <p>Your Email Address:
+						 <input type="email" id="yourEmailAddress" placeholder="Email Address" required autofocus> <br>
+					 </p>
+					 <!-- Password -->
+					 <p>Password to your Email:
+						 <input type="password" id="yourEmailAddressPassword" placeholder="Password"  required> <br>
+					 </p>
+					 <!-- Receipt's Email Address -->
+					 <p>The Email Address of the person(s) you want to send this Post Card</p>
 					 <input type="text" id="theirEmailAddress">
 					 <button id="Send">Send</button>
 					 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>

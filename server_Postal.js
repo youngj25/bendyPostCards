@@ -49,6 +49,7 @@ Postal.on('connection', function (socket) {
 		 
 		 // Creates the package for the email
 		 var mailOptions = {
+		     //from: usersAccounts[0].user,
 		     from: usersAccounts[0].user,
 			 to: 'youngj25@southernct.edu',
 			 subject: data.subject,

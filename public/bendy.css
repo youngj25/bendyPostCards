@@ -39,12 +39,6 @@ body{
 	 margin-right:auto;	
 }
 
-canvas{
-	 /* width: 75%; */
-	 /* overflow: hidden; */
-}
-
-
 #yourEmailInfo{
 	 background-color: grey;
 	 display:none;
@@ -62,6 +56,12 @@ canvas{
 	 width: 100%;
 }
 
+#go_Back_Button{
+	 display:none;
+	 border: 3px solid rgb(0,0,95);
+	 background-color: white;
+}
+
 #postCardToolsCanvas{
 	 margin-left:auto;
 	 margin-right:auto;	
@@ -70,7 +70,6 @@ canvas{
 	 height: calc(20px + 0.01vw);
 	 /* width: 75%; */
 	 border: 3px solid rgb(0,0,95);
-	 /* background-color: rgb(95,95,195); */
 	 overflow: hidden;
 }
 
@@ -100,9 +99,10 @@ canvas{
 	 margin-right:auto;
 	 width: 75%;
 	 max-width: 500px;
-	 font: bold;
-	 font-weight: bold;
+	 /* font: bold;
+	 font-weight: bold; */
 	 font-size: calc(10px + 1vw);	
 	 /* https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
 	 color: rgb(130,115,220);
+	 background-color: black;
 }

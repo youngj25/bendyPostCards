@@ -31,6 +31,7 @@ function init() {
 	 // Outgoing Sockets -------------------------------------------
 	 var emailAddress= "";
 	 
+	 /** Login Button ---> To be change to Image History
 	 // Retrieve the Information and Send it to the server for verification
 	 document.getElementById("Login").addEventListener("click", function(){
 		 emailAddress = document.getElementById("yourEmailAddress").value;
@@ -46,6 +47,7 @@ function init() {
 		 //document.getElementById("yourEmailAddressPassword").innerHTML = "Hello World";
 		 console.log("sent")
 	 });
+	 **/
 	 
 	 // Send the Postcard to the server to be sent out
 	 document.getElementById("Send").addEventListener("click", function(){
@@ -161,6 +163,38 @@ function init() {
 		 }catch(e){}
 	 }
 	
+	 // Make Objects Draggable - Additionally used as buttons
+	 function drag_objects(){
+		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
+				
+			 dragControls.addEventListener( 'dragstart', function(event) {
+																			 if (event.object.name == "undo")
+																				 undo_Canvas_Change();
+																			 else if (event.object.name == "redo")
+																				 redo_Canvas_Change();
+																			 else if (event.object.name == "background"){
+																				 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
+																			 }
+																			 else if (event.object.name == "send"){
+																				 document.getElementById("receiptEmail").style.display = "block";
+																				 document.getElementById("go_Back_Button").style.display = "inline";
+																				 document.getElementById("colorCanvas").style.display = "none";
+																				 document.getElementById("postCardToolsCanvas").style.display = "none";
+																			 }
+																			 //console.log(event);
+																		 });
+																		 
+			 dragControls.addEventListener( 'drag', function(event)   {
+																			 if (event.object.type == "button")
+																				 event.object.position.set(event.object.posX, event.object.posY, event.object.posZ);
+																			 });
+																		
+			 dragControls.addEventListener( 'dragend', function(event)   { });
+																		 
+			 //console.log(dragControls);
+			 //https://www.learnthreejs.com/drag-drop-dragcontrols-mouse/
+	 }
+	 	
 	 /** Load Buttons
 	
 	 **/
@@ -427,38 +461,14 @@ function init() {
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
 	 
-	 // Make Objects Draggable - Additionally used as buttons
-	 function drag_objects(){
-		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
-				
-			 dragControls.addEventListener( 'dragstart', function(event) {
-																			 if (event.object.name == "undo")
-																				 undo_Canvas_Change();
-																			 else if (event.object.name == "redo")
-																				 redo_Canvas_Change();
-																			 else if (event.object.name == "background"){
-																				 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
-																			 }
-																			 else if (event.object.name == "send"){
-																				 document.getElementById("yourEmailInfo").style.display = "block";
-																				 document.getElementById("receiptEmail").style.display = "block";
-																				 document.getElementById("colorCanvas").style.display = "none";
-																				 document.getElementById("postCardToolsCanvas").style.display = "none";
-																			 }
-																			 //console.log(event);
-																		 });
-																		 
-			 dragControls.addEventListener( 'drag', function(event)   {
-																			 if (event.object.type == "button")
-																				 event.object.position.set(event.object.posX, event.object.posY, event.object.posZ);
-																			 });
-																		
-			 dragControls.addEventListener( 'dragend', function(event)   { });
-																		 
-			 //console.log(dragControls);
-			 //https://www.learnthreejs.com/drag-drop-dragcontrols-mouse/
-	 }
 	 
+	 // Go Back Button Click
+	 document.getElementById("go_Back_Button").addEventListener("click", function(){
+		 document.getElementById("receiptEmail").style.display = "none";
+		 document.getElementById("go_Back_Button").style.display = "none";
+		 document.getElementById("colorCanvas").style.display = "block";
+		 document.getElementById("postCardToolsCanvas").style.display = "block";		 
+	 });
 	 
 }
 window.onload = init;
