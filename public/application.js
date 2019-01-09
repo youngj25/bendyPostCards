@@ -58,7 +58,7 @@ function init() {
 			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 		 }			 
 		
-		 Postal.emit('Mail',data);
+		 //Postal.emit('Mail',data);
 		 console.log("mail");
 	 });
 
