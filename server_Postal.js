@@ -44,10 +44,12 @@ Postal.on('connection', function (socket) {
 	 // User sends us text and image to email
 	 socket.on('Mail', function(data){
 		 
+		 console.log(data);
 		 console.log("MAILING....");
 		 
 		 // Creates the package for the email
 		 var mailOptions = {
+		     //from: usersAccounts[0].user,
 		     from: usersAccounts[0].user,
 			 to: 'youngj25@southernct.edu',
 			 subject: data.subject,

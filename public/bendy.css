@@ -10,22 +10,22 @@ header{
 	 top: 0%;
 }
 
-body{
-	 background-color: black;
-}
-
 #title{
+	 max-width: 400px;
 	 width:90%;
-	 /* background-color: rgb(120,20,20); */
-	 padding-left: 5%;
-	 padding-right: 5%;
+	 background-color: black;
+	 display:block;
 	 margin-left:auto;
 	 margin-right:auto;
 }
 
+body{
+	 background-color: black;
+}
+
 #appContainer{
-	 border: 3px solid rgb(20,20,120);
-	 background-color: rgb(0,64,125);
+	 border: 3px solid rgb(20,90,155);
+	 background-color: rgb(36,36,36);
 	 margin-left:auto;
 	 margin-right:auto;	
 }
@@ -42,9 +42,11 @@ body{
 #yourEmailInfo{
 	 background-color: grey;
 	 display:none;
-	 border-style: solid;
 	 margin-left:auto;
-	 margin-right:auto;		 
+	 margin-right:auto;		
+	 max-width: 1200px;
+	 width: 75%;
+	 border: 3px solid rgb(0,0,95);
 }
 
 #postCardCreator{
@@ -54,19 +56,53 @@ body{
 	 width: 100%;
 }
 
-#WebGL-output{
-	 display: block;
+#go_Back_Button{
+	 display:none;
+	 border: 3px solid rgb(0,0,95);
+	 background-color: white;
+}
+
+#postCardToolsCanvas{
 	 margin-left:auto;
 	 margin-right:auto;	
-	 width: 70%;
-	 border: 3px solid black;
+	 display:block;
+	 max-width: 1200px;
+	 height: calc(20px + 0.01vw);
+	 /* width: 75%; */
+	 border: 3px solid rgb(0,0,95);
+	 overflow: hidden;
+}
+
+#colorCanvas{
+	 border: 3px solid rgb(0,0,95);
+	 margin-left:auto;
+	 margin-right:auto;	
+	 display:block;
+	 width: 75%;
+	 max-width: 1200px;
+}
+
+#postCardCanvas{
+	 margin-left:auto;
+	 margin-right:auto;	
+	 display:block;
+	 max-width: 1200px;
+	 width: 75%;
+	 border: 3px solid rgb(0,0,95);
 	 background-color: white;
 }
 
 #receiptEmail{
-	 display:none;
+	 border: 3px solid rgb(0,0,95);
+	 display:none;  /* display:block; */
 	 margin-left:auto;
 	 margin-right:auto;
-	 padding-left: 10%;
-	 padding-right: 10%;
+	 width: 75%;
+	 max-width: 1200px;
+	 /* font: bold;
+	 font-weight: bold; */
+	 font-size: calc(10px + 1vw);	
+	 /* https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
+	 color: rgb(130,115,220);
+	 background-color: black;
 }

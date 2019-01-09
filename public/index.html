@@ -5,56 +5,71 @@
 		 <title>Bendy</title>
 		 <meta charset="utf-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
+		 <!-- Socket IO -->
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+		 <!-- Application -->
 		 <script type="text/javascript" src="application.js"></script>
+		 <!-- CSS -->
 		 <link rel="stylesheet" type="text/css" href="bendy.css" />
+		 <!-- Three.js -->
+		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js"></script>
+		 <script type="text/javascript" src="../libraries&frameworks/three.js-master/examples/js/controls/DragControls.js"></script>
 		 <!-- Bootstrap -->
 		 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		 <!-- JSCOLOR -->
+		 <script src="../libraries&frameworks/jscolor-2.0.5/jscolor.js"></script>
 	 </head>
 	 
 	 <!-- Body -->
 	 <body>
 		 <!-- Header -->
 		 <!--<header>Bendy PostCards:</header>-->
-		 <img id="title" src="title.png" alt="Italian Trulli" style ="">
+		 <img id="title" src="Images/title.png" alt="Italian Trulli">
 		 <!-- https://flamingtext.com/logo/Design-Crafts?_variations=true -->
-		 <br>
+		 <!-- <br> -->
 		 <div id = "appContainer">
-		 
 			 <div id="results"></div>
 			 
 			 <!-- User  inputs-->			 
-			 <div id ="yourEmailInfo" class = "webApplication">
-				 <h4>Please enter your email info to use the Post Card Creator</h4>
-				 <!-- Email Address -->
-				 <p>Your Email Address:</p>
-				 <input type="email" id="yourEmailAddress" placeholder="Email Address" required autofocus> <br>
-				 <!-- Password -->
-				 <p>Your Email Address's Password:</p>
-				 <input type="password" id="yourEmailAddressPassword" placeholder="Password"  required> <br>
-				 <button id="Login">Login</button>
-			 </div>
 			 
 			 <!-- The Web Application -->
 			 <div id = "postCardCreator" class = "webApplication">
-				 <br>
-				 <canvas id="WebGL-output"></canvas>
-				 <br>
+				 <button id="go_Back_Button">Go Back</button>
+				 <!-- The Post Card Tools Canvas -->
+				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
-				 <div id = "receiptEmail">
-					 <p>The Email Address of the person you want to send this Post Card</p>
-				 	 <input type="text" id="theirEmailAddress">
+				 <input id="colorCanvas" class="jscolor {closable:true,closeText:'Close me!'}" value="cc4499">
+				 
+				 <!-- The Post Card Canvas -->
+				 <canvas id="postCardCanvas"> </canvas>
+				 
+				 
+				 <!-- The Receipt Emails -->
+				 <div id="receiptEmail">
+					 <h4>Please fill out the following information to send this Post Card</h4>
+					 <!-- Email Address -->
+					 <p>Your Email Address:
+						 <input type="email" id="yourEmailAddress" placeholder="Email Address" required autofocus> <br>
+					 </p>
+					 <!-- Password -->
+					 <p>Password to your Email:
+						 <input type="password" id="yourEmailAddressPassword" placeholder="Password"  required> <br>
+					 </p>
+					 <!-- Receipt's Email Address -->
+					 <p>The Email Address of the person(s) you want to send this Post Card</p>
+					 <input type="text" id="theirEmailAddress" placeholder="firstEmail@gmail.com; nextEmail@gmail.com" style="width: 75%;" required>
 					 <button id="Send">Send</button>
 					 <p>If there are multiple receipts, please seperate their email addresses with semicolons (;)</p>
+					 
 				 </div>
 				 
 			 </div>
 			 
 			 
 		 </div>
+	 
 		 
 	 </body>
-	 
 </html>
