@@ -67,9 +67,35 @@
 				 
 			 </div>
 			 
+			 <!-- Web Cam -->
+			 <center>
+				 <video id="vidDisplay" autoplay = "true">
+					 No Video support in your browser...
+				 </video>
+			 </center>
 			 
 		 </div>
-	 
+		 <!-- https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX -->
+		 
+		 
+		 <script type"text/javascript">
+			 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+									  navigator.msGetUserMedia || navigator.oGetUserMedia;
+									  
+			 if(navigator.getUserMedia){
+				 navigator.getUserMedia({video:true},handleVideo, videoError);
+			 }
+		 
+			 function handleVideo(stream){
+				 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
+				 document.querySelector('#vidDisplay').srcObject = stream;
+			 }
+			 
+			 function videoError(e){
+				 alert("There has been some problem");
+			 }
+			 
+		 </script>
 		 
 	 </body>
 </html>
