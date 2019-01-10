@@ -1,6 +1,33 @@
 var socket, Postal = io('/postal', {forceNew:true});
 
 function init() {
+	 /** Web Application State
+		 There will be four States for this web Application.
+		 Buttons will perform different functions depending
+		 on the state of the application.
+		 
+		 State 1 - 'PostCard Canvas'
+			 This is the default and base state of the Web
+			 Application. All other states are accessible from
+			 this state. In this state the PostCard Toolbar,
+			 Color Selection Canvas and the PostCard Canvas are
+			 the only thing present.
+			 
+		 State 2 - 'WebCam Canvas'
+			 This is the state where the video canvas is
+			 presented and the PostCard Canvas is hidden from
+			 the user. The user will be able to take pictures
+			 in this state and then set it as the PostCard 
+			 Background Image.
+			 
+		 State 3 - 'PostCard History'
+			 Still in development
+			 
+		 State 4 - 'Send PostCard'
+			 In this state, 
+	 **/
+	 var webApplicationState = "PostCard Canvas";
+	
 	
 	 // Sockets -------------------------------------------
 	 // socket = io.connect('http://localhost:9000');
@@ -177,18 +204,36 @@ function init() {
 																			 }
 																			 else if (event.object.name == "cam"){
 																				 console.log("CAM!!!");
+																				 // Source
+																				 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
 																				 document.getElementById("vidDisplay").style.display = "block";
 																				 document.getElementById("go_Back_Button").style.display = "inline";
 																				 document.getElementById("postCardCanvas").style.display = "none";
 																				 document.getElementById("colorCanvas").style.display = "none";
+																				 webApplicationState = "WebCam Canvas";
 																				 
+																				 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+																										  navigator.msGetUserMedia || navigator.oGetUserMedia;
+																										  
+																				 if(navigator.getUserMedia){
+																					 navigator.getUserMedia({video:true},handleVideo, videoError);
+																				 }
+																			 
+																				 function handleVideo(stream){
+																					 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
+																					 document.querySelector('#vidDisplay').srcObject = stream;
+																				 }
 																				 
+																				 function videoError(e){
+																					 alert("There has been some problem");
+																				 }																				 
 																			 }
 																			 else if (event.object.name == "send"){
 																				 document.getElementById("receiptEmail").style.display = "block";
 																				 document.getElementById("go_Back_Button").style.display = "inline";
 																				 document.getElementById("colorCanvas").style.display = "none";
 																				 document.getElementById("postCardToolsCanvas").style.display = "none";
+																				 webApplicationState = "Send PostCard";
 																			 }
 																			 //console.log(event);
 																		 });
@@ -260,7 +305,7 @@ function init() {
 		 buttons.push(backgroundButton);
 		 objects.push(backgroundButton);
 		 
-		 // 3 - Background Button
+		 // 3 - WebCam Button
 		 T = loader.load( 'Images/camButton.png' );
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
@@ -499,10 +544,30 @@ function init() {
 	 
 	 // Go Back Button Click
 	 document.getElementById("go_Back_Button").addEventListener("click", function(){
-		 document.getElementById("receiptEmail").style.display = "none";
+		 
+		 if(webApplicationState == "WebCam Canvas"){
+			 // Source for stopping Media:
+			 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
+			 let stream = document.querySelector('#vidDisplay').srcObject;
+			 let tracks = stream.getTracks();
+
+			 tracks.forEach(function(track) {
+				 track.stop();
+			 });
+
+			 document.querySelector('#vidDisplay').srcObject = null;
+			 document.getElementById("vidDisplay").style.display = "none";
+			 document.getElementById("postCardCanvas").style.display = "block";		 
+		 }
+		 else if(webApplicationState == "Send PostCard"){
+			 document.getElementById("receiptEmail").style.display = "none";
+			 document.getElementById("postCardToolsCanvas").style.display = "block";
+		 }
+		 
 		 document.getElementById("go_Back_Button").style.display = "none";
 		 document.getElementById("colorCanvas").style.display = "block";
-		 document.getElementById("postCardToolsCanvas").style.display = "block";		 
+		 
+		 webApplicationState = "PostCard Canvas";
 	 });
 	 
 }
