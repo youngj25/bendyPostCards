@@ -439,7 +439,7 @@ function init() {
 		 // First we must go back to the inital state and change the background Color		 
 		 postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
 		 // console.log(fillStyle);
-		 // Now we will set the right background color
+		 // Now we will set the new background color
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.fillRect(0, 0, postCardCanvas.width, postCardCanvas.height);
 		 
@@ -469,7 +469,41 @@ function init() {
 		 canvasHistoryPointer++;		 
 	 }
 	
-	
+	 /** create Fill Image
+		 Since images suchs as the canvas color and/or
+		 the Canvas can be changed at anytime. I need a
+		 way to make it dynamic/flexible.
+	 **/
+	 function create_Picture_Image(){
+		 // Source:
+		 // https://stackoverflow.com/questions/23745988/get-an-image-from-the-video
+		 postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
+		 
+		 // Now we'll proceed to follow the changes until the current one
+		 for(var x = 1; x< canvasHistoryPointer+1; x++)
+			 if(canvasHistory[x].type = "text"){
+				 // Now recreate the text
+				 // postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
+				 // console.log(canvasHistory[x].text);
+				 postCardCanvasContext.fillStyle = canvasHistory[x].fillStyle;
+				 postCardCanvasContext.font = canvasHistory[x].font;	 
+				 postCardCanvasContext.fillText(canvasHistory[x].text, canvasHistory[x].xCord, canvasHistory[x].yCord);	
+			 }
+		 
+		 // Splice the canvasHistory
+		 canvasHistory.splice(canvasHistoryPointer+1);
+		 // Reset the Buttons
+		 buttons[0].material.color.setHex(0xffffff);
+		 buttons[1].material.color.setHex(0x575757);
+		 
+		 
+		 var history = {
+			 type:"Image",
+			 image:postCardCanvasContext.getImageData(0, 0, postCardCanvas.width, postCardCanvas.height)
+		 }
+		 canvasHistory.push(history);
+		 canvasHistoryPointer++;		 
+	 }
 	
 	
 	 // Event Section -------------------------------------------
@@ -509,7 +543,9 @@ function init() {
 		 if(event.keyCode == 38){
 			 //undo_Canvas_Change();
 			 //create_Fill_Image("#FF0000");
-			 //console.log("Up arrow- turn blue");
+			 console.log("Up arrow- pic");
+			 create_Picture_Image();
+			 
 		 }
 		 else if(event.keyCode == 40){
 			 //redo_Canvas_Change();				 
