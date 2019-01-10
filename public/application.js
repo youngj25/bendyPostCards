@@ -2,7 +2,7 @@ var socket, Postal = io('/postal', {forceNew:true});
 
 function init() {
 	 /** Web Application State
-		 There will be four States for this web Application.
+		 There will be five States for this web Application.
 		 Buttons will perform different functions depending
 		 on the state of the application.
 		 
@@ -25,9 +25,15 @@ function init() {
 			 
 		 State 4 - 'Send PostCard'
 			 In this state, 
+			 
+		 State 5 - 'Text Addition'
+			 In this state, the user can add text to the Canvas
+			 by typing on a keyboard.
 	 **/
 	 var webApplicationState = "PostCard Canvas";
-	
+	 
+	 // Webcam Stream Initial
+	 document.querySelector('#vidDisplay').srcObject = null;
 	
 	 // Sockets -------------------------------------------
 	 // socket = io.connect('http://localhost:9000');
@@ -126,9 +132,11 @@ function init() {
 	 canvasHistory.push(history);
 	 canvasHistoryPointer++;
  
+	 
 	 // Hello World
 	 create_Text("Hello World!","20px Georgia", "Black", 10, 50);
 	 
+	 /**
 	 // Create gradient
 	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
 	 gradient.addColorStop("0", "Blue");
@@ -139,7 +147,7 @@ function init() {
 	 
 	 
 	 
-	 
+	 **/
 	 
 	 
 	 
@@ -195,59 +203,90 @@ function init() {
 		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
 				
 			 dragControls.addEventListener( 'dragstart', function(event) {
-																			 if (event.object.name == "undo")
-																				 undo_Canvas_Change();
-																			 else if (event.object.name == "redo")
-																				 redo_Canvas_Change();
-																			 else if (event.object.name == "background"){
-																				 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
-																			 }
-																			 else if (event.object.name == "cam"){
-																				 console.log("CAM!!!");
-																				 
-																				 // Attempting the Set the Video Height
-																				 document.getElementById("vidCanvas").style.height = postCardCanvasContext.canvas.height;
-																				 document.getElementById("vidCanvas").style.maxHeight = postCardCanvasContext.canvas.height;
-																				 document.getElementById("vidCanvas").style.overflow = "hidden";
-																				 
-																				 // Source
-																				 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
-																				 document.getElementById("vidCanvas").style.display = "block";
-																				 document.getElementById("go_Back_Button").style.display = "inline";
-																				 document.getElementById("postCardCanvas").style.display = "none";
-																				 document.getElementById("colorCanvas").style.display = "none";
-																				 webApplicationState = "WebCam Canvas";
-																				 
-																				 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
-																										  navigator.msGetUserMedia || navigator.oGetUserMedia;
-																										  
-																				 if(navigator.getUserMedia){
-																					 navigator.getUserMedia({video:true},handleVideo, videoError);
-																				 }
-																			 
-																				 function handleVideo(stream){
-																					 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
-																					 document.querySelector('#vidDisplay').srcObject = stream;
-																				 }
-																				 
-																				 function videoError(e){
-																					 alert("There has been some problem");
-																				 }																				 
-																			 }
-																			 else if (event.object.name == "send"){
-																				 document.getElementById("receiptEmail").style.display = "block";
-																				 document.getElementById("go_Back_Button").style.display = "inline";
-																				 document.getElementById("colorCanvas").style.display = "none";
-																				 document.getElementById("postCardToolsCanvas").style.display = "none";
-																				 webApplicationState = "Send PostCard";
-																			 }
-																			 //console.log(event);
-																		 });
+				 if (event.object.name == "undo" && webApplicationState == "PostCard Canvas")
+					 undo_Canvas_Change();
+				 else if (event.object.name == "redo" && webApplicationState == "PostCard Canvas")
+					 redo_Canvas_Change();
+				 else if (event.object.name == "background" && webApplicationState == "PostCard Canvas"){
+					 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
+				 }
+				 else if (event.object.name == "cam" && webApplicationState == "PostCard Canvas"){
+					 console.log("CAM!!!");
+					 
+					 // Attempting the Set the Video Height
+					 document.getElementById("vidCanvas").style.height = postCardCanvasContext.canvas.height;
+					 document.getElementById("vidCanvas").style.maxHeight = postCardCanvasContext.canvas.height;
+					 document.getElementById("vidCanvas").style.overflow = "hidden";
+					 
+					 // Source
+					 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
+					 document.getElementById("vidCanvas").style.display = "block";
+					 document.getElementById("go_Back_Button").style.display = "inline";
+					 document.getElementById("postCardCanvas").style.display = "none";
+					 document.getElementById("colorCanvas").style.display = "none";
+					 webApplicationState = "WebCam Canvas";
+					 
+					 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+											  navigator.msGetUserMedia || navigator.oGetUserMedia;
+											  
+					 if(navigator.getUserMedia){
+						 navigator.getUserMedia({video:true},handleVideo, videoError);
+					 }
+				 
+					 function handleVideo(stream){
+						 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
+						 document.querySelector('#vidDisplay').srcObject = stream;
+					 }
+					 
+					 function videoError(e){
+						 alert("There has been some problem");
+					 }																				 
+				 }
+				 else if (event.object.name == "text"){
+					 if(event.object.ON && webApplicationState == "Text Addition"){
+						 console.log("Text Mode ON");
+						 
+						 
+						 // Correcting the Buttons
+						 for(var x = 0; x< buttons.length; x++)
+							 buttons[x].material.color.setHex(0xffffff);
+						
+						 // Now check the Undo and Redo Buttons
+						 if(canvasHistoryPointer == 0)
+							 buttons[0].material.color.setHex(0x575757);
+						 else if(canvasHistoryPointer+1 >= canvasHistory.length)
+							 buttons[1].material.color.setHex(0x575757);
+						 
+						 webApplicationState = "PostCard Canvas";
+						 event.object.ON = false;
+					 }
+					 else if(webApplicationState == "PostCard Canvas"){
+						 console.log("Text Mode OFF");
+						 
+						 for(var x = 0; x< buttons.length; x++)
+							 buttons[x].material.color.setHex(0x575757);
+						 
+						 buttons[4].material.color.setHex(0xffffff);
+						 
+						 
+						 webApplicationState = "Text Addition";
+						 event.object.ON = true;
+					 }
+				 }
+				 else if (event.object.name == "send" && webApplicationState == "PostCard Canvas"){
+					 document.getElementById("receiptEmail").style.display = "block";
+					 document.getElementById("go_Back_Button").style.display = "inline";
+					 document.getElementById("colorCanvas").style.display = "none";
+					 document.getElementById("postCardToolsCanvas").style.display = "none";
+					 webApplicationState = "Send PostCard";
+				 }
+				 //console.log(event);
+			 });
 																		 
 			 dragControls.addEventListener( 'drag', function(event)   {
-																			 if (event.object.type == "button")
-																				 event.object.position.set(event.object.posX, event.object.posY, event.object.posZ);
-																			 });
+				 if (event.object.type == "button")
+					 event.object.position.set(event.object.posX, event.object.posY, event.object.posZ);
+				 });
 																		
 			 dragControls.addEventListener( 'dragend', function(event)   { });
 																		 
@@ -327,6 +366,24 @@ function init() {
 		 buttons.push(camButton);
 		 objects.push(camButton);
 		 
+		 // 4 - Text Button
+		 T = loader.load( 'Images/textButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var textButton = new THREE.Sprite(T1);				 
+		 textButton.posX = 1;
+		 textButton.posY =  6.5;
+		 textButton.posZ = 0;
+		 textButton.position.set(textButton.posX, textButton.posY, textButton.posZ);
+		 textButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
+		 textButton.name = "text";	
+		 textButton.type = "button";	
+		 textButton.On = false;	
+		 scene.add(textButton);
+		 buttons.push(textButton);
+		 objects.push(textButton);
+
+		 
 		 // Send Button
 		 T = loader.load( 'Images/sendButton.png' );
 		 T.minFilter = THREE.LinearFilter;
@@ -381,11 +438,15 @@ function init() {
 		 if(canvasHistoryPointer <= 0){
 			 // Button 0 - the Undo Button
 			 buttons[0].material.color.setHex(0x575757);
+			 buttons[1].material.color.setHex(0xffffff);
 		 }
 		 // Otherwise this means that we can can assume that now we have a space to go
 		 // forward. For this reason, new we'll set the button 1 (The redo button)
 		 // color back to normal
-		 else buttons[1].material.color.setHex(0xffffff);
+		 else{
+			 buttons[0].material.color.setHex(0xffffff);
+			 buttons[1].material.color.setHex(0xffffff);
+		 }
 	 }
 	 
 	 /** redo Canvas Changes
@@ -407,12 +468,16 @@ function init() {
 		 // If we can't go forward any further then change the color of the redo button
 		 if(canvasHistoryPointer+1 >= canvasHistory.length){
 			 // Button 1 - the Redo Button
+			 buttons[0].material.color.setHex(0xffffff);
 			 buttons[1].material.color.setHex(0x575757);
 		 }
 		 // Otherwise this means that we can can assume that now we have a space to go
 		 // backwards. For this reason, new we'll set the button 0 (The Undo Button)
 		 // color back to normal
-		 else buttons[0].material.color.setHex(0xffffff);
+		 else{
+			 buttons[0].material.color.setHex(0xffffff);
+			 buttons[1].material.color.setHex(0xffffff);
+		 }
 	 }
 	 
 	 /** create Text
@@ -490,7 +555,7 @@ function init() {
 	 function create_Picture_Image(){
 		 // Source:
 		 // https://stackoverflow.com/questions/23745988/get-an-image-from-the-video
-		 postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
+		 //postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
 		 
 		 // Now we'll proceed to follow the changes until the current one
 		 for(var x = 1; x< canvasHistoryPointer+1; x++)
@@ -515,6 +580,19 @@ function init() {
 		 canvasHistoryPointer++;		 
 	 }
 	
+	 /** Stops the Webcam
+		 
+		 Source for stopping Media:
+		 https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
+	 **/
+	 function stop_Webcam(){
+		 let stream = document.querySelector('#vidDisplay').srcObject;
+		 let tracks = stream.getTracks();
+
+		 tracks.forEach(function(track) {
+			 track.stop();
+		 });
+	 }
 	
 	 // Event Section -------------------------------------------
 	 
@@ -553,8 +631,8 @@ function init() {
 		 if(event.keyCode == 38){
 			 //undo_Canvas_Change();
 			 //create_Fill_Image("#FF0000");
-			 console.log("Up arrow- pic");
-			 create_Picture_Image();			 
+			 //console.log("Up arrow- pic");
+			 //create_Picture_Image();			 
 		 }
 		 else if(event.keyCode == 40){
 			 //redo_Canvas_Change();				 
@@ -589,20 +667,23 @@ function init() {
 	 }
 	 window.addEventListener('resize', onWindowResize, false);
 	 
+	 // Video was clicked so take a picture
+	 document.getElementById("vidDisplay").addEventListener("click", function(){
+		 var x = document.querySelector('#vidDisplay').srcObject;
+		 //console.log(x);
+		 if(x != null){
+			 document.getElementById("vidCanvas").style.display = "none";
+			 postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
+			 document.getElementById("webCamPictureOption").style.display = "block";		
+			 document.getElementById("postCardCanvas").style.display = "block";	
+		 }
+	 });
 	 
-	 // Go Back Button Click
+	 // Go Back Button Clicked
 	 document.getElementById("go_Back_Button").addEventListener("click", function(){
 		 
 		 if(webApplicationState == "WebCam Canvas"){
-			 // Source for stopping Media:
-			 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
-			 let stream = document.querySelector('#vidDisplay').srcObject;
-			 let tracks = stream.getTracks();
-
-			 tracks.forEach(function(track) {
-				 track.stop();
-			 });
-
+			 stop_Webcam();
 			 // Go back to the last Canvas History Pointer setting
 			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
 			 
@@ -622,15 +703,34 @@ function init() {
 		 webApplicationState = "PostCard Canvas";
 	 });
 	 
-	 // Go Back Button Click
-	 document.getElementById("take_Picture").addEventListener("click", function(){
-		 
+	 // Take Picture Button Clicked
+	 document.getElementById("take_Picture").addEventListener("click", function(){		 
 		 document.getElementById("vidCanvas").style.display = "none";
 		 postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
-		 
 		 document.getElementById("webCamPictureOption").style.display = "block";		
-		 document.getElementById("postCardCanvas").style.display = "block";		
+		 document.getElementById("postCardCanvas").style.display = "block";			 
 	 });
 	 
+	 // Retake Picture Button Clicked
+	 document.getElementById("retake_Picture").addEventListener("click", function(){
+		 document.getElementById("vidCanvas").style.display = "block";		 
+		 document.getElementById("webCamPictureOption").style.display = "none";		
+		 document.getElementById("postCardCanvas").style.display = "none";		
+	 });
+	 
+	 // Keep Picture Button Clicked
+	 document.getElementById("keep_Picture").addEventListener("click", function(){
+		 stop_Webcam();
+		 document.getElementById("postCardToolsCanvas").style.display = "block";
+		 document.getElementById("colorCanvas").style.display = "block";
+		 document.getElementById("webCamPictureOption").style.display = "none";		 
+		 document.getElementById("go_Back_Button").style.display = "none";		 
+		 webApplicationState = "PostCard Canvas";
+		 create_Picture_Image();
+	 });
+	
+	 
+	 
+
 }
 window.onload = init;
