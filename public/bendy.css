@@ -99,26 +99,33 @@ body{
 	 margin-right:auto;
 	 width: 75%;
 	 max-width: 1200px;
-	 /* font: bold;
-	 font-weight: bold; */
 	 font-size: calc(10px + 1vw);	
 	 /* https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
 	 color: rgb(130,115,220);
 	 background-color: black;
 }
 
+#vidCanvas{
+	 display:none;  /* display:block; */
+	 overflow: hidden;
+}
+
 #vidDisplay{
+	 border: 3px solid rgb(0,0,95);
+	 margin-left:auto;
+	 margin-right:auto;
+	 width: 75%;
+	 max-width: 1200px;
+}
+
+#webCamPictureOption{
 	 border: 3px solid rgb(0,0,95);
 	 display:none;  /* display:block; */
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 75%;
 	 max-width: 1200px;
-	 
-	 
 }
-
-
 
 
 

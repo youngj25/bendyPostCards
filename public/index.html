@@ -44,10 +44,19 @@
 				 <canvas id="postCardCanvas"> </canvas>
 				 
 				 <!-- Web Cam -->
-				 <video id="vidDisplay" autoplay = "true">
-					 No Video support in your browser...
-				 </video>
+				 <div id = "vidCanvas">
+					 <video id="vidDisplay" autoplay = "true">
+						 No Video support in your browser...
+					 </video>
+					 <div></div>
+					 <button id="take_Picture">Take Picture</button>
+				 </div>
 				 
+				 <!-- Web Cam Picture Option -->
+				 <div id = "webCamPictureOption">
+					 <button id="retake_Picture">Take Picture</button>
+					 <button id="keep_Picture">Keep Picture</button>
+				 </div>
 				 
 				 <!-- The Receipt Emails -->
 				 <div id="receiptEmail">

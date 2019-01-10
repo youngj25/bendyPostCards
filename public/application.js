@@ -204,9 +204,15 @@ function init() {
 																			 }
 																			 else if (event.object.name == "cam"){
 																				 console.log("CAM!!!");
+																				 
+																				 // Attempting the Set the Video Height
+																				 document.getElementById("vidCanvas").style.height = postCardCanvasContext.canvas.height;
+																				 document.getElementById("vidCanvas").style.maxHeight = postCardCanvasContext.canvas.height;
+																				 document.getElementById("vidCanvas").style.overflow = "hidden";
+																				 
 																				 // Source
 																				 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
-																				 document.getElementById("vidDisplay").style.display = "block";
+																				 document.getElementById("vidCanvas").style.display = "block";
 																				 document.getElementById("go_Back_Button").style.display = "inline";
 																				 document.getElementById("postCardCanvas").style.display = "none";
 																				 document.getElementById("colorCanvas").style.display = "none";
@@ -278,7 +284,7 @@ function init() {
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0x575757 } );
 		 var redoButton = new THREE.Sprite(T1);				 
-		 redoButton.posX = -7;
+		 redoButton.posX = -6.5;
 		 redoButton.posY =  6.5;
 		 redoButton.posZ = 0;
 		 redoButton.position.set(redoButton.posX, redoButton.posY, redoButton.posZ);
@@ -294,7 +300,7 @@ function init() {
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
 		 var backgroundButton = new THREE.Sprite(T1);				 
-		 backgroundButton.posX = -5;
+		 backgroundButton.posX = -4;
 		 backgroundButton.posY =  6.5;
 		 backgroundButton.posZ = 0;
 		 backgroundButton.position.set(backgroundButton.posX, backgroundButton.posY, backgroundButton.posZ);
@@ -310,7 +316,7 @@ function init() {
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
 		 var camButton = new THREE.Sprite(T1);				 
-		 camButton.posX = -3;
+		 camButton.posX = -1.5;
 		 camButton.posY =  6.5;
 		 camButton.posZ = 0;
 		 camButton.position.set(camButton.posX, camButton.posY, camButton.posZ);
@@ -359,7 +365,10 @@ function init() {
 		 This function will undo all of the changes
 		 made to the canvas and decrease the variable
 		 canvasHistoryPointer by one so that it will
-		 point at the current canvas state		 
+		 point at the current canvas state		
+
+		 Source for the idea of this method:
+		 https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 **/
 	 function undo_Canvas_Change(){
 		 // Checks to see whether the we can go back one step
@@ -383,7 +392,10 @@ function init() {
 		 This function will redo all of the changes
 		 made to the canvas and increase the variable
 		 canvasHistoryPointer by one so that it will
-		 point at the current canvas state		 
+		 point at the current canvas state
+
+		 Source for the idea of this method:
+		 https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 **/
 	 function redo_Canvas_Change(){
 		 // Checks to see whether the we can go forward one step
@@ -469,10 +481,11 @@ function init() {
 		 canvasHistoryPointer++;		 
 	 }
 	
-	 /** create Fill Image
-		 Since images suchs as the canvas color and/or
-		 the Canvas can be changed at anytime. I need a
-		 way to make it dynamic/flexible.
+	 /** create Picture Image
+		 In order to make the Webcam Image the Background,
+		 the text will be re-rendered after the new 
+		 Background is set. Then afterwards the new image
+		 will be added to the canvasHistory
 	 **/
 	 function create_Picture_Image(){
 		 // Source:
@@ -483,8 +496,6 @@ function init() {
 		 for(var x = 1; x< canvasHistoryPointer+1; x++)
 			 if(canvasHistory[x].type = "text"){
 				 // Now recreate the text
-				 // postCardCanvasContext.putImageData(canvasHistory[0].image, 0, 0);
-				 // console.log(canvasHistory[x].text);
 				 postCardCanvasContext.fillStyle = canvasHistory[x].fillStyle;
 				 postCardCanvasContext.font = canvasHistory[x].font;	 
 				 postCardCanvasContext.fillText(canvasHistory[x].text, canvasHistory[x].xCord, canvasHistory[x].yCord);	
@@ -494,8 +505,7 @@ function init() {
 		 canvasHistory.splice(canvasHistoryPointer+1);
 		 // Reset the Buttons
 		 buttons[0].material.color.setHex(0xffffff);
-		 buttons[1].material.color.setHex(0x575757);
-		 
+		 buttons[1].material.color.setHex(0x575757);		 
 		 
 		 var history = {
 			 type:"Image",
@@ -544,19 +554,21 @@ function init() {
 			 //undo_Canvas_Change();
 			 //create_Fill_Image("#FF0000");
 			 console.log("Up arrow- pic");
-			 create_Picture_Image();
-			 
+			 create_Picture_Image();			 
 		 }
 		 else if(event.keyCode == 40){
 			 //redo_Canvas_Change();				 
-			 // console.log(event.keyCode);
+			 
+			 
+			 //postCardCanvas = document.getElementById("postCardCanvas");
+			 //var postCardCanvasContext = postCardCanvas.getContext("2d");
+			 
 		 }
 		 // Are you there
 		 else if(event.keyCode == 32){
 			 
 			 //console.log("ideal width: "+(window.innerWidth*.7));
 		 }
-		 // https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
 	 }; 
 	 document.addEventListener('keydown', onKeyDown, false);
 	 
@@ -591,9 +603,13 @@ function init() {
 				 track.stop();
 			 });
 
+			 // Go back to the last Canvas History Pointer setting
+			 postCardCanvasContext.putImageData(canvasHistory[canvasHistoryPointer].image, 0, 0);
+			 
 			 document.querySelector('#vidDisplay').srcObject = null;
-			 document.getElementById("vidDisplay").style.display = "none";
+			 document.getElementById("vidCanvas").style.display = "none";
 			 document.getElementById("postCardCanvas").style.display = "block";		 
+			 document.getElementById("webCamPictureOption").style.display = "none";		
 		 }
 		 else if(webApplicationState == "Send PostCard"){
 			 document.getElementById("receiptEmail").style.display = "none";
@@ -604,6 +620,16 @@ function init() {
 		 document.getElementById("colorCanvas").style.display = "block";
 		 
 		 webApplicationState = "PostCard Canvas";
+	 });
+	 
+	 // Go Back Button Click
+	 document.getElementById("take_Picture").addEventListener("click", function(){
+		 
+		 document.getElementById("vidCanvas").style.display = "none";
+		 postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
+		 
+		 document.getElementById("webCamPictureOption").style.display = "block";		
+		 document.getElementById("postCardCanvas").style.display = "block";		
 	 });
 	 
 }

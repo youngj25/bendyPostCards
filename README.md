@@ -30,17 +30,29 @@ If you use any external libraries or code-snippets, you must provide the followi
   - License
   - Websites
   
-  -jsColor
-  -Version: 2.0.5
-  -Purpose: Canvas/Text Color Selection
-  -License: GNU GPL license v3
-  -Websites: http://jscolor.com/
+  - Bootstrap
+  - Version: 4.0.0
+  - Purpose: 
+  - License:
+  - Websites:
   
-  -Three.js
-  -Version: r83
-  -Purpose: Canvas Toolbar
-  -License: MIT License
-  -Websites: http://threejs.org/
+  - jsColor
+  - Version: 2.0.5
+  - Purpose: Canvas/Text Color Selection
+  - License: GNU GPL license v3
+  - Websites: http://jscolor.com/
+  
+  - Socket.io
+  - Version: 2.1.1
+  - Purpose: Fast/Light Weight Communication between client and server
+  - License:
+  - Websites:
+  
+  - Three.js
+  - Version: r83
+  - Purpose: Canvas Toolbar
+  - License: MIT License
+  - Websites: http://threejs.org/
   
   
   
