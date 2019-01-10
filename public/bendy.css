@@ -109,7 +109,7 @@ body{
 
 #vidDisplay{
 	 border: 3px solid rgb(0,0,95);
-	 display:block;  /* display:block; */
+	 display:none;  /* display:block; */
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 75%;

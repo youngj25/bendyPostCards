@@ -175,6 +175,15 @@ function init() {
 																			 else if (event.object.name == "background"){
 																				 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
 																			 }
+																			 else if (event.object.name == "cam"){
+																				 console.log("CAM!!!");
+																				 document.getElementById("vidDisplay").style.display = "block";
+																				 document.getElementById("go_Back_Button").style.display = "inline";
+																				 document.getElementById("postCardCanvas").style.display = "none";
+																				 document.getElementById("colorCanvas").style.display = "none";
+																				 
+																				 
+																			 }
 																			 else if (event.object.name == "send"){
 																				 document.getElementById("receiptEmail").style.display = "block";
 																				 document.getElementById("go_Back_Button").style.display = "inline";
@@ -250,6 +259,22 @@ function init() {
 		 scene.add(backgroundButton);
 		 buttons.push(backgroundButton);
 		 objects.push(backgroundButton);
+		 
+		 // 3 - Background Button
+		 T = loader.load( 'Images/camButton.png' );
+		 T.minFilter = THREE.LinearFilter;
+		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
+		 var camButton = new THREE.Sprite(T1);				 
+		 camButton.posX = -3;
+		 camButton.posY =  6.5;
+		 camButton.posZ = 0;
+		 camButton.position.set(camButton.posX, camButton.posY, camButton.posZ);
+		 camButton.scale.set(2.5 - 287/(window.innerWidth*.7), 7, 1);
+		 camButton.name = "cam";	
+		 camButton.type = "button";	
+		 scene.add(camButton);
+		 buttons.push(camButton);
+		 objects.push(camButton);
 		 
 		 // Send Button
 		 T = loader.load( 'Images/sendButton.png' );
