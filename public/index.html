@@ -31,20 +31,33 @@
 		 <!-- <br> -->
 		 <div id = "appContainer">
 			 <div id="results"></div>
-			 
-			 <!-- User  inputs-->			 
-			 
 			 <!-- The Web Application -->
 			 <div id = "postCardCreator" class = "webApplication">
 				 <button id="go_Back_Button">Go Back</button>
 				 <!-- The Post Card Tools Canvas -->
 				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
+				 <!-- The Color Selection Canvas -->
 				 <input id="colorCanvas" class="jscolor {closable:true,closeText:'Close me!'}" value="cc4499">
 				 
 				 <!-- The Post Card Canvas -->
 				 <canvas id="postCardCanvas"> </canvas>
 				 
+				 <!-- Web Cam -->
+				 <div id = "vidCanvas">
+					 <video id="vidDisplay" autoplay = "true">
+						 No Video support in your browser...
+					 </video>
+					 <div></div>
+					 <button id="take_Picture">Take Picture</button>
+				 </div>
+				 
+				 <!-- Web Cam Picture Option -->
+				 <div id = "webCamPictureOption">
+					 <button id="retake_Picture">Retake Picture</button>
+					 <span> </span>
+					 <button id="keep_Picture">Keep Picture</button>
+				 </div>
 				 
 				 <!-- The Receipt Emails -->
 				 <div id="receiptEmail">
@@ -68,8 +81,7 @@
 			 </div>
 			 
 			 
+			 
 		 </div>
-	 
-		 
 	 </body>
 </html>
