@@ -35,6 +35,61 @@ var Postal = io.of('/postal');
 Postal.on('connection', function (socket) {
 	 var usersAccounts = [];
 	 
+	 
+	 /** Send Email Please
+		 
+	 **/
+	 socket.on('Send Email Please', function(data){
+		 console.log(data);
+		 
+		 var transporter, recognizeEmail = true;
+		 console.log("Received....");
+		 try{
+			 // If it's an Gmail Account
+			 if(user.indexOf("@gmail.com")){
+				 transporter = nodemailer.createTransport({
+					  service: 'gmail',
+					  auth: {
+						user: data.user,
+						pass: data.pass
+					  }
+				 });		
+			 }
+			 
+			 // If the Account type is unrecognizable
+			 else{			 				 
+				 recognizeEmail = false;
+				 // Force an Error
+				 var x = 3/0;
+			 } 
+
+			 // Just to be on the safe side
+			 if(recognizeEmail){
+				 var account = {
+					 emailAddress: data.user,
+					 history:[],
+					 socket: socketID
+				 };
+				 
+				 usersAccounts.push(account);
+			 }
+			 console.log("Finish Adding the user.");
+			 Postal.emit('Account Logged In');
+		 }
+		 catch(e){
+			 if(recognizeEmail)
+				 console.log("Email/Password is no good...");
+			 else 
+				 console.log("Do not recognize this Email");
+		 }
+	 
+	 
+		 
+		 
+	 });
+	 
+	 
+	 
 	 // A user is Logs into the account
 	 socket.on('Account Login', function(data){
 		 console.log("A user with the email '"+data.user+"' is trying to log in");
@@ -116,6 +171,9 @@ Postal.on('connection', function (socket) {
 			 else 
 				 console.log("Do not recognize this Email");
 		 }
+	 
+	 
+	 
 	 }
  
 	 //Disconnecting player
