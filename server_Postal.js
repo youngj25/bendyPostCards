@@ -43,8 +43,9 @@ Postal.on('connection', function (socket) {
 		 //console.log(data);
 		 
 		 doesThisUserAlreadyExist(data.sender);
+		 console.log(new Date());
 		 console.log(usersAccounts[usersAccounts.length-1]);
-		 console.log("Number of users:"+usersAccounts.length);
+		 console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
 		 
 		 
 		 
@@ -66,13 +67,13 @@ Postal.on('connection', function (socket) {
 				 recognizeEmail = false;
 			 }
 
-			 
+			 addPictureToHistory(data.sender,data.text,data.receipt);
 		 }
 		 catch(e){
 			 
 		 }
 		 
-		 accountErrorRemoval(data.sender);
+		 //accountErrorRemoval(data.sender);
 		 
 		 /**
 		 var transporter, recognizeEmail = true;
@@ -184,7 +185,30 @@ Postal.on('connection', function (socket) {
 		 
 	 }
 	 
-	 
+	 /** Add Picture To History
+		 Add the Picture and the additional information to the
+		 PostCard History
+	 **/
+	 function addPictureToHistory(emailAddress,picture,receipt){
+		 // Get the Date and Time
+		 var d =new Date();
+		 
+		 // Create the Picture File
+		 var postcard = {
+			 date : d.toDateString(),
+			 picture : picture,
+			 receipt : receipt,
+			 time : d.toLocaleTimeString()
+		 }
+		 console.log(postcard.date + " @ " +postcard.time);
+		 
+		 for(var x = 0; x < usersAccounts.length && !found; x++)
+			 if(emailAddress == usersAccounts[x].emailAddress){
+				 // Found!!!
+				 found = true;
+				 usersAccounts[x].history.push(postcard);
+			 }
+	 }
 	 
 	 // --- old
 	 // A user is Logs into the account

@@ -44,7 +44,7 @@ body{
 	 display:none;
 	 margin-left:auto;
 	 margin-right:auto;		
-	 max-width: 1200px;
+	 max-width: 550px;
 	 width: 75%;
 	 border: 3px solid rgb(0,0,95);
 }
@@ -66,7 +66,7 @@ body{
 	 margin-left:auto;
 	 margin-right:auto;	
 	 display:block;
-	 max-width: 1200px;
+	 max-width: 550px;
 	 height: calc(20px + 0.01vw);
 	 /* width: 75%; */
 	 border: 3px solid rgb(0,0,95);
@@ -79,14 +79,14 @@ body{
 	 margin-right:auto;	
 	 display:block;
 	 width: 75%;
-	 max-width: 1200px;
+	 max-width: 550px;
 }
 
 #postCardCanvas{
 	 margin-left:auto;
 	 margin-right:auto;	
 	 display:block;
-	 max-width: 1200px;
+	 max-width: 550px;
 	 width: 75%;
 	 border: 3px solid rgb(0,0,95);
 	 background-color: white;
@@ -98,7 +98,7 @@ body{
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 75%;
-	 max-width: 1200px;
+	 max-width: 550px;
 	 font-size: calc(10px + 1vw);	
 	 /* https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
 	 color: rgb(130,115,220);
@@ -115,7 +115,7 @@ body{
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 75%;
-	 max-width: 1200px;
+	 max-width: 550px;
 }
 
 #webCamPictureOption{
@@ -124,7 +124,7 @@ body{
 	 margin-left:auto;
 	 margin-right:auto;
 	 width: 75%;
-	 max-width: 1200px;
+	 max-width: 550px;
 }
 
 
