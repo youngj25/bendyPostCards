@@ -92,6 +92,16 @@ body{
 	 background-color: white;
 }
 
+#results{
+	 border: 3px solid rgb(0,0,95);
+	 display:none;  /* display:block; */
+	 background-color: black;
+	 margin-left:auto;
+	 margin-right:auto;
+	 width: 75%;
+	 max-width: 550px;
+}
+
 #receiptEmail{
 	 border: 3px solid rgb(0,0,95);
 	 display:none;  /* display:block; */

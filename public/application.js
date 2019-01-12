@@ -51,6 +51,7 @@ function init() {
 	 // An error has occured with the sending the Post Card
 	 Postal.on('Error', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
+		 document.getElementById("results").style.display = "block";
 		 document.getElementById("results").style.color = "red";
 		 document.getElementById("yourEmailInfo").style.display = "inline";
 	 });
@@ -59,6 +60,7 @@ function init() {
 	 Postal.on('Sent', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.color = "blue";
+		 document.getElementById("results").style.display = "block";
 	 });
 	  
 	 // Outgoing Sockets -------------------------------------------
@@ -698,6 +700,7 @@ function init() {
 		 }
 		 else if(webApplicationState == "Send PostCard"){
 			 document.getElementById("receiptEmail").style.display = "none";
+			 document.getElementById("results").style.display = "none";
 			 document.getElementById("postCardToolsCanvas").style.display = "block";
 			 document.getElementById("results").innerHTML = "";
 		 }

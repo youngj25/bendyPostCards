@@ -58,20 +58,18 @@ Postal.on('connection', function (socket) {
 		 try{
 			 var transporter, recognizeEmail=true;
 			 
+			 var service = 'gmail';
+			 service = findEmailServiceOrReturnError(data.sender);
 			 
 			 
-			 // For Gmail
-			 //if(data.sender.indexOf("@gmail.com")){
+			 
 			 transporter = nodemailer.createTransport({
-				  //service: data.sender.substring(AtLocation+1,ComLocation),
-				  service: 'gmail',
+				  service: service,
 				  auth: {
 					user: data.sender,
 					pass: data.passW
 				  }
 			 });		
-			 // List of services
-			 // https://nodemailer.com/smtp/well-known/ 
 			 
 			 
 			 //}
@@ -96,6 +94,7 @@ Postal.on('connection', function (socket) {
 					 var message = "Your Post Card has been sent.";
 					 var receipt = null;
 					 var firewall = null;
+					 var usernameANDpassword = null;
 					 
 					 if (error) {
 						 
@@ -115,11 +114,23 @@ Postal.on('connection', function (socket) {
 							 
 							 // https://stackoverflow.com/questions/14654736/nodemailer-econnrefused
 						 }
+						 // Both the username and password error
+						 else if((""+error).indexOf('Username and Password not accepted')>=0){
+						 
+							 message = "Your Email Address and Password appears to be incorrect."
+							 usernameANDpassword = true;
+						 }
+						 // 
+						 else if((""+error).indexOf('Invalid login: 535 Error: authentication failed')>=0){
+						 
+							 message = "Error: authentication failed... idk"
+							 // FULL REPORT
+							 console.log(error);
+							 // usernameANDpassword = true;
+						 }
 						 
 						 // Else.... shoot lol IDK
 						 else{
-							 
-							 
 							 // FULL REPORT
 							 // console.log(error);
 							 
@@ -128,16 +139,14 @@ Postal.on('connection', function (socket) {
 							 
 							 
 							 message = "Your Post Card was not sent."
-							 
-							 
-							 
 						 }
 					 
 						 accountErrorRemoval(data.sender);
 						 var statusData = {
 							 message : message,
-							 receipt : receipt,
-							 firewall: firewall
+							 firewall: firewall,
+							 receipt : receipt,							 
+							 usernameANDpassword : usernameANDpassword
 						 }
 						 
 						 Postal.emit('Error', statusData);	
@@ -255,6 +264,90 @@ Postal.on('connection', function (socket) {
 				 usersAccounts[x].history.push(postcard);
 			 }
 	 }
+	 
+	 /**
+		 Find Email Service or return OutLook365
+		 Searches to find a suitable email address,
+		 if one is not found then it'll automatically
+		 assume that the service belongs to OutLook365
+		 based on personal experiences.. some colleges
+		 can use that instead there own name but the
+		 service is under OutLook365. 
+	 **/
+	 function findEmailServiceOrReturnError(emailAddress){
+		 var AtSignLocation = emailAddress.indexOf("@");
+		 var addressAfterTheAtSign=emailAddress.substring(AtSignLocation);
+		 
+		 /** Let the chain of if statesments begin.
+			 The source for the list of Supported Services
+			 https://nodemailer.com/smtp/well-known/
+		 **/
+		 
+		 // 126
+		 if(addressAfterTheAtSign.indexOf('126')){
+			 return '126'			 
+		 }
+		 // 163
+		 else if(addressAfterTheAtSign.indexOf('163')){
+			 return '163'			 
+		 }
+		 // 1und1
+		 else if(addressAfterTheAtSign.indexOf('1und1')){
+			 return '1und1'			 
+		 }
+		 // AOL
+		 else if(addressAfterTheAtSign.indexOf('AOL')){
+			 return 'AOL'			 
+		 }
+		 // DebugMail
+		 else if(addressAfterTheAtSign.indexOf('DebugMail')){
+			 return 'DebugMail'			 
+		 }
+		 // DynectEmail
+		 else if(addressAfterTheAtSign.indexOf('AOL')){
+			 return 'DynectEmail'			 
+		 }
+		 // FastMail
+		 else if(addressAfterTheAtSign.indexOf('FastMail')){
+			 return 'FastMail'			 
+		 }
+		 // GandiMail
+		 else if(addressAfterTheAtSign.indexOf('GandiMail')){
+			 return 'GandiMail'			 
+		 }
+		 // Gmail
+		 else if(addressAfterTheAtSign.indexOf('Gmail')){
+			 return 'Gmail'			 
+		 }
+		 // Godaddy
+		 else if(addressAfterTheAtSign.indexOf('Godaddy')){
+			 return 'Godaddy'			 
+		 }
+		 // GodaddyAsia
+		 else if(addressAfterTheAtSign.indexOf('GodaddyAsia')){
+			 return 'GodaddyAsia'			 
+		 }
+		 // GodaddyEurope
+		 else if(addressAfterTheAtSign.indexOf('GodaddyEurope')){
+			 return 'GodaddyEurope'			 
+		 }
+		 // "hot.ee"
+		 else if(addressAfterTheAtSign.indexOf('hot.ee')){
+			 return 'hot.ee'			 
+		 }
+		 // "Hotmail"
+		 else if(addressAfterTheAtSign.indexOf('Hotmail')){
+			 return 'Hotmail'			 
+		 }
+		 // iCloud
+		 else if(addressAfterTheAtSign.indexOf('iCloud')){
+			 return 'iCloud'			 
+		 }
+		 
+		 
+		 
+	 }
+	 
 	 
 	 // --- old
 	 // A user is Logs into the account
