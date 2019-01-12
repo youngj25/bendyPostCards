@@ -39,7 +39,7 @@ Postal.on('connection', function (socket) {
 	 /** Send Email Please
 		 
 	 **/
-	 socket.on('Send Email Please', function(data){
+	 socket.on('Send Email Please', async function(data){
 		 //console.log(data);
 		 
 		 doesThisUserAlreadyExist(data.sender);
@@ -47,20 +47,23 @@ Postal.on('connection', function (socket) {
 		 console.log(usersAccounts[usersAccounts.length-1]);
 		 console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
 		 
-		 
+		 /**
 		 var AtLocation = data.sender.indexOf("@");
 		 var ComLocation = data.sender.lastIndexOf(".");
 		 console.log("service:");
 		 console.log(data.sender.substring(AtLocation+1,ComLocation));
-		 
+		 **/
 		 
 		 
 		 try{
 			 var transporter, recognizeEmail=true;
 			 
-			 var service = 'gmail';
-			 service = findEmailServiceOrReturnError(data.sender);
-			 
+			 /**
+				 Additionally to allocate enough time to determine the
+				 service type. Await and Async will be used.
+			 **/
+			 var service = await findEmailServiceOrReturnError(data.sender);
+			 console.log("service: "+service); // 10
 			 
 			 
 			 transporter = nodemailer.createTransport({
@@ -283,71 +286,91 @@ Postal.on('connection', function (socket) {
 			 https://nodemailer.com/smtp/well-known/
 		 **/
 		 
-		 // 126
-		 if(addressAfterTheAtSign.indexOf('126')){
-			 return '126'			 
-		 }
-		 // 163
-		 else if(addressAfterTheAtSign.indexOf('163')){
-			 return '163'			 
-		 }
-		 // 1und1
-		 else if(addressAfterTheAtSign.indexOf('1und1')){
-			 return '1und1'			 
-		 }
-		 // AOL
-		 else if(addressAfterTheAtSign.indexOf('AOL')){
-			 return 'AOL'			 
-		 }
-		 // DebugMail
-		 else if(addressAfterTheAtSign.indexOf('DebugMail')){
-			 return 'DebugMail'			 
-		 }
-		 // DynectEmail
-		 else if(addressAfterTheAtSign.indexOf('AOL')){
-			 return 'DynectEmail'			 
-		 }
-		 // FastMail
-		 else if(addressAfterTheAtSign.indexOf('FastMail')){
-			 return 'FastMail'			 
-		 }
-		 // GandiMail
-		 else if(addressAfterTheAtSign.indexOf('GandiMail')){
-			 return 'GandiMail'			 
-		 }
-		 // Gmail
-		 else if(addressAfterTheAtSign.indexOf('Gmail')){
-			 return 'Gmail'			 
-		 }
-		 // Godaddy
-		 else if(addressAfterTheAtSign.indexOf('Godaddy')){
-			 return 'Godaddy'			 
-		 }
-		 // GodaddyAsia
-		 else if(addressAfterTheAtSign.indexOf('GodaddyAsia')){
-			 return 'GodaddyAsia'			 
-		 }
-		 // GodaddyEurope
-		 else if(addressAfterTheAtSign.indexOf('GodaddyEurope')){
-			 return 'GodaddyEurope'			 
-		 }
-		 // "hot.ee"
-		 else if(addressAfterTheAtSign.indexOf('hot.ee')){
-			 return 'hot.ee'			 
-		 }
-		 // "Hotmail"
-		 else if(addressAfterTheAtSign.indexOf('Hotmail')){
-			 return 'Hotmail'			 
-		 }
-		 // iCloud
-		 else if(addressAfterTheAtSign.indexOf('iCloud')){
-			 return 'iCloud'			 
-		 }
+		 
+		 return new Promise(resolve => {
+			 setTimeout(() => {
+			     var service = 'Outlook365';	
+				 
+			     // 126
+				 if(addressAfterTheAtSign.indexOf('126')>=0){
+					 service = '126'			 
+				 }
+				 // 163
+				 else if(addressAfterTheAtSign.indexOf('163')>=0){
+					 service = '163'			 
+				 }
+				 // 1und1
+				 else if(addressAfterTheAtSign.indexOf('1und1')>=0){
+					 service = '1und1'			 
+				 }
+				 // AOL
+				 else if(addressAfterTheAtSign.indexOf('AOL')>=0){
+					 service = 'AOL'			 
+				 }
+				 // DebugMail
+				 else if(addressAfterTheAtSign.indexOf('DebugMail')>=0){
+					 service = 'DebugMail'			 
+				 }
+				 // DynectEmail
+				 else if(addressAfterTheAtSign.indexOf('DynectEmail')>=0){
+					 service = 'DynectEmail'			 
+				 }
+				 // FastMail
+				 else if(addressAfterTheAtSign.indexOf('FastMail')>=0){
+					 service = 'FastMail'			 
+				 }
+				 // GandiMail
+				 else if(addressAfterTheAtSign.indexOf('GandiMail')>=0){
+					 service = 'GandiMail'			 
+				 }
+				 // Gmail
+				 else if(addressAfterTheAtSign.indexOf('gmail')>=0){
+					 service = 'gmail'			 
+				 }
+				 // Godaddy
+				 else if(addressAfterTheAtSign.indexOf('Godaddy')>=0){
+					 service = 'Godaddy'			 
+				 }
+				 // GodaddyAsia
+				 else if(addressAfterTheAtSign.indexOf('GodaddyAsia')>=0){
+					 service = 'GodaddyAsia'			 
+				 }
+				 // GodaddyEurope
+				 else if(addressAfterTheAtSign.indexOf('GodaddyEurope')>=0){
+					 service = 'GodaddyEurope'			 
+				 }
+				 // "hot.ee"
+				 else if(addressAfterTheAtSign.indexOf('hot.ee')>=0){
+					 service = 'hot.ee'			 
+				 }
+				 // "Hotmail"
+				 else if(addressAfterTheAtSign.indexOf('Hotmail')>=0){
+					 service = 'Hotmail'			 
+				 }
+				 // iCloud
+				 else if(addressAfterTheAtSign.indexOf('iCloud')>=0){
+					 service = 'iCloud'			 
+				 }
+				
+				
+				
+			     resolve(service);
+			 }, 3000);
+	     });
+		 
 		 
 		 
 		 
 	 }
 	 
+	 
+	 function resolveServicesAfter3Seconds(emailAddress) { 
+		 return new Promise(resolve => {
+			 setTimeout(() => {
+			     findEmailServiceOrReturnError(emailAddress);
+			 }, 2000);
+	     });
+	 }
 	 
 	 // --- old
 	 // A user is Logs into the account

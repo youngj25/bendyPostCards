@@ -29,6 +29,11 @@ function init() {
 		 State 5 - 'Text Addition'
 			 In this state, the user can add text to the Canvas
 			 by typing on a keyboard.
+		 
+		 State 6 - 'Awaiting Response'
+			 In this state, the user has sent a request to send the
+			 Post card and we are awaiting the response from the 
+			 server.
 	 **/
 	 var webApplicationState = "PostCard Canvas";
 	 
@@ -53,7 +58,8 @@ function init() {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.display = "block";
 		 document.getElementById("results").style.color = "red";
-		 document.getElementById("yourEmailInfo").style.display = "inline";
+		 //document.getElementById("yourEmailInfo").style.display = "inline";
+		 webApplicationState = "Send PostCard";
 	 });
 	  
 	 // The PostCard has been sent
@@ -61,6 +67,7 @@ function init() {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.color = "blue";
 		 document.getElementById("results").style.display = "block";
+		 webApplicationState = "Send PostCard";
 	 });
 	  
 	 // Outgoing Sockets -------------------------------------------
@@ -96,6 +103,8 @@ function init() {
 		
 		 Postal.emit('Send Email Please',data);
 		 console.log("mail");
+		 webApplicationState = "Awaiting Response";
+		 dots=-1;
 	 });
 
 
@@ -182,7 +191,7 @@ function init() {
 	 renderer.render(scene, camera);
 	 
 	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
-	  
+	 var steps = 0, dots=-1;
 	 var buttons = [];
 	 var objects = [];
 	 renderScene();
@@ -193,11 +202,28 @@ function init() {
 	 // Rendering
 	 function renderScene(){
 		 try{
+			 if(webApplicationState == "Awaiting Response")
+				 steps++;
+			 
 			 //Render steps
 			 //render using requestAnimationFrame
 			 requestAnimationFrame(renderScene);
 			 renderer.render(scene, camera);
-			 scene.traverse(function (e) {});
+			 scene.traverse(function (e) {
+				 if(webApplicationState == "Awaiting Response" && steps%30 == 0){
+					 dots =(dots+1)%7;
+					 var message= ".";
+					 
+					 for(var x=0; x<dots;x++)
+						 message+=".."
+					 
+					 document.getElementById("results").style.color = "white";
+					 document.getElementById("results").innerHTML = message;
+					 document.getElementById("results").style.display = "block";					 
+				 }
+				 
+				 
+			 });
 		 }catch(e){}
 	 }
 	
