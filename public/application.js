@@ -86,11 +86,10 @@ function init() {
 	 document.getElementById("Send").addEventListener("click", function(){
 		 var data = {
 			 sender:  document.getElementById("yourEmailAddress").value,
-			 passW:  document.getElementById("yourEmailAddressPassword").value,
+			 passW:   document.getElementById("yourEmailAddressPassword").value,
 			 receipt: document.getElementById("theirEmailAddress").value,
 			 subject: "Bendy Postal From Jason",
-			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
+			 picture: '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 		 }			 
 		
 		 Postal.emit('Send Email Please',data);
@@ -273,6 +272,8 @@ function init() {
 						 
 						 webApplicationState = "Text Addition";
 						 event.object.ON = true;
+						 
+						 create_Text("Hello World!","20px Georgia", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width-30)+15, Math.floor(Math.random()*postCardCanvas.height-30)+15);
 					 }
 				 }
 				 else if (event.object.name == "send" && webApplicationState == "PostCard Canvas"){
@@ -489,6 +490,7 @@ function init() {
 	 **/
 	 function create_Text(text,font, fillStyle, xCord, yCord){		 
 		 // Add Text to Canvas
+		 
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.font = font;	 
 		 postCardCanvasContext.fillText(text, xCord, yCord);		 
@@ -697,6 +699,7 @@ function init() {
 		 else if(webApplicationState == "Send PostCard"){
 			 document.getElementById("receiptEmail").style.display = "none";
 			 document.getElementById("postCardToolsCanvas").style.display = "block";
+			 document.getElementById("results").innerHTML = "";
 		 }
 		 
 		 document.getElementById("go_Back_Button").style.display = "none";

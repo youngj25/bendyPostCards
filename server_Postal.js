@@ -67,47 +67,37 @@ Postal.on('connection', function (socket) {
 				 recognizeEmail = false;
 			 }
 
-			 addPictureToHistory(data.sender,data.text,data.receipt);
+			 
+			 
+			 if(recognizeEmail){
+				 // Creates the package for the email
+				 var mailOptions = {
+					 from: data.sender,
+					 to: data.receipt,
+					 subject: data.subject,
+					 html: data.picture
+				 };
+				 
+				 // Sends out the Email
+				 transporter.sendMail(mailOptions, function(error, info){
+					 var message = "Your Post Card has been sent."
+					 if (error) {
+						 console.log(error);
+						 message = "Your Post Card was not sent."
+						 accountErrorRemoval(data.sender);
+						 Postal.emit('Error', data={ message : message});		
+					 } else {
+						 console.log('Email sent: ' + info.response);
+						 Postal.emit('Error', data={ message : message});	
+						 addPictureToHistory(data.sender,data.picture,data.receipt);					 
+					 }
+				 });
+			 }
 		 }
 		 catch(e){
 			 
 		 }
 		 
-		 //accountErrorRemoval(data.sender);
-		 
-		 /**
-		 var transporter, recognizeEmail = true;
-		 try{
-			 // If the Account type is unrecognizable
-			 else{			 				 
-				 
-				 // Force an Error
-				 var x = 3/0;
-			 } 
-
-			 // Just to be on the safe side
-			 if(recognizeEmail){
-				 var account = {
-					 emailAddress: data.user,
-					 history:[],
-					 socket: socketID
-				 };
-				 
-				 usersAccounts.push(account);
-			 }
-			 console.log("Finish Adding the user.");
-			 Postal.emit('Account Logged In');
-		 }
-		 catch(e){
-			 if(recognizeEmail)
-				 console.log("Email/Password is no good...");
-			 else 
-				 console.log("Do not recognize this Email");
-		 }
-	 
-	 
-		 
-		 **/
 	 });
 	 
 	 /** Does This User Already Exist

@@ -25,34 +25,38 @@ The initial plans were for the user to enter an email address and password, then
 
 If you use any external libraries or code-snippets, you must provide the following information for each (credit must be given to others):
   - Name
-  - Version
-  - Purpose
-  - License
-  - Websites
+	 - Version
+	 - Purpose
+	 - License
+	 - Websites
+  
   
   - Bootstrap
-  - Version: 4.0.0
-  - Purpose: 
-  - License:
-  - Websites:
+	 - Version: 4.0.0
+	 - Purpose: 
+	 - License:
+	 - Websites:
+  
   
   - jsColor
-  - Version: 2.0.5
-  - Purpose: Canvas/Text Color Selection
-  - License: GNU GPL license v3
-  - Websites: http://jscolor.com/
+	 - Version: 2.0.5
+	 - Purpose: Canvas/Text Color Selection
+	 - License: GNU GPL license v3
+	 - Websites: http://jscolor.com/
+  
   
   - Socket.io
-  - Version: 2.1.1
-  - Purpose: Fast/Light Weight Communication between client and server
-  - License:
-  - Websites:
+	 - Version: 2.1.1
+	 - Purpose: Fast/Light Weight Communication between client and server
+	 - License:
+	 - Websites:
+  
   
   - Three.js
-  - Version: r83
-  - Purpose: Canvas Toolbar
-  - License: MIT License
-  - Websites: http://threejs.org/
+	 - Version: r83
+	 - Purpose: Canvas Toolbar
+	 - License: MIT License
+	 - Websites: http://threejs.org/
   
   
   
