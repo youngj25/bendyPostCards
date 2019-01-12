@@ -40,25 +40,46 @@ Postal.on('connection', function (socket) {
 		 
 	 **/
 	 socket.on('Send Email Please', function(data){
-		 console.log(data);
+		 //console.log(data);
 		 
-		 var transporter, recognizeEmail = true;
-		 console.log("Received....");
+		 doesThisUserAlreadyExist(data.sender);
+		 console.log(usersAccounts[usersAccounts.length-1]);
+		 console.log("Number of users:"+usersAccounts.length);
+		 
+		 
+		 
 		 try{
-			 // If it's an Gmail Account
-			 if(user.indexOf("@gmail.com")){
+			 var transporter, recognizeEmail=true;
+			 
+			 // For Gmail
+			 if(data.sender.indexOf("@gmail.com")){
 				 transporter = nodemailer.createTransport({
 					  service: 'gmail',
 					  auth: {
-						user: data.user,
-						pass: data.pass
+						user: data.sender,
+						pass: data.passW
 					  }
 				 });		
 			 }
+			 // If the Account type is unrecognizable
+			 else{	
+				 recognizeEmail = false;
+			 }
+
 			 
+		 }
+		 catch(e){
+			 
+		 }
+		 
+		 accountErrorRemoval(data.sender);
+		 
+		 /**
+		 var transporter, recognizeEmail = true;
+		 try{
 			 // If the Account type is unrecognizable
 			 else{			 				 
-				 recognizeEmail = false;
+				 
 				 // Force an Error
 				 var x = 3/0;
 			 } 
@@ -85,11 +106,87 @@ Postal.on('connection', function (socket) {
 	 
 	 
 		 
-		 
+		 **/
 	 });
 	 
+	 /** Does This User Already Exist
+		 Checks to see whether this user is already in
+		 our list of users. If not then add the user to 
+		 the list.
+	 **/
+	 function doesThisUserAlreadyExist(emailAddress){
+		 
+		 var found= false;
+		 
+		 // Searching to see if this emailAddress is already loaded
+		 for(var x = 0; x < usersAccounts.length && !found; x++)
+			 if(emailAddress == usersAccounts[x].emailAddress){
+				 found= true;				 
+			 }
+		 
+		 /** If the email was found then we don't need to do anymore
+		     work otherwise we need to add the emailAddress to or list
+			 of users
+		 **/
+		 if(!found){
+			 var user = {
+				 emailAddress : emailAddress,
+				 history : [],
+				 socketID : null				 
+			 }			 
+			 
+			 usersAccounts.push(user);
+		 }
+	 }
+	 
+	 /** Set Temporary Socket ID
+		 When the user has verified that themselves by sending
+		 an email successfully, we'll save their socketID and give
+		 them access to see their PostCard History. This function
+		 will find the user in the usersAccounts and set their 
+		 socketID to their current session. At then end of their
+		 session their ID will be erased from usersAccounts.
+	 **/
+	 function setTempSocketID(emailAddress, socketID){
+		 var found = false;
+		 
+		 for(var x = 0; x < usersAccounts.length && !found; x++)
+			 if(emailAddress == usersAccounts[x].emailAddress){
+				 // Setting the Temporary Socket ID
+				 usersAccounts[x].socketID = socketID;
+				 found = true;
+			 }
+	 }
+	 
+	 /** Account Error Removal
+		 If the account had an error with sending. Then
+		 we'll check whether the account is worth keeping
+		 or not. If the account has previous PostCard History
+		 then the account will be left alone. However, if
+		 the account doesn't have any History, then it
+		 will be removed.
+	 **/
+	 function accountErrorRemoval(emailAddress){
+		 var found = false;
+		 
+		 for(var x = 0; x < usersAccounts.length && !found; x++)
+			 if(emailAddress == usersAccounts[x].emailAddress){
+				 // Found!!!
+				 found = true;
+				 
+				 // If the user doesn't have any PostCard History
+				 if(usersAccounts[x].history.length == 0){
+					 
+					 console.log("Delete this user!!!!");
+					 usersAccounts.splice(x,1);
+				 }
+			 }
+		 
+	 }
 	 
 	 
+	 
+	 // --- old
 	 // A user is Logs into the account
 	 socket.on('Account Login', function(data){
 		 console.log("A user with the email '"+data.user+"' is trying to log in");

@@ -85,13 +85,15 @@ function init() {
 	 // Send the Postcard to the server to be sent out
 	 document.getElementById("Send").addEventListener("click", function(){
 		 var data = {
+			 sender:  document.getElementById("yourEmailAddress").value,
+			 passW:  document.getElementById("yourEmailAddressPassword").value,
 			 receipt: document.getElementById("theirEmailAddress").value,
 			 subject: "Bendy Postal From Jason",
 			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
 			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 		 }			 
 		
-		 //Postal.emit('Mail',data);
+		 Postal.emit('Send Email Please',data);
 		 console.log("mail");
 	 });
 
