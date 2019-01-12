@@ -36,8 +36,8 @@ function init() {
 	 document.querySelector('#vidDisplay').srcObject = null;
 	
 	 // Sockets -------------------------------------------
-	 // socket = io.connect('http://localhost:9000');
-	 socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
+	 socket = io.connect('http://localhost:9000');
+	 //socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
      
 	 // Incoming Sockets -------------------------------------------
 	 //The user has successfully logged in
@@ -275,7 +275,18 @@ function init() {
 						 webApplicationState = "Text Addition";
 						 event.object.ON = true;
 						 
-						 create_Text("Hello World!","20px Georgia", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width-30)+15, Math.floor(Math.random()*postCardCanvas.height-30)+15);
+						 //create_Text("Hello World!","20px Georgia", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
+						 
+						
+						 var text = document.getElementById("textTool").value;
+						 var fontStyle = document.getElementById("Font Selection").value;
+						 var fontSize = document.getElementById("Font Size Selection").value;
+						 console.log(text);
+						 console.log(fontStyle);
+						 console.log(fontSize);
+						 create_Text(text,fontSize+"px "+fontStyle, '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
+						 
+					 
 					 }
 				 }
 				 else if (event.object.name == "send" && webApplicationState == "PostCard Canvas"){

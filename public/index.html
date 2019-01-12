@@ -40,8 +40,37 @@
 				 <!-- The Post Card Tools Canvas -->
 				 <div id="postCardToolsCanvas" style="width: 75%;"></div>
 				 
+				 <!-- The Text Tools Canvas -->
+				 <div id="textToolsCanvas" style="width: 75%; border: 3px solid rgb(20,90,155); background-color: rgb(36,36,36); margin-left:auto; margin-right:auto;">
+				 
+				 
+					 <input type="text" id="textTool" placeholder="Enter Text Here" style="width: 30%;" autofocus> 
+					 <span style="color: rgb(136,136,136);">Font:</span>
+					 <select id="Font Selection">
+					     <option value="Arial">Arial</option>
+					     <option value="Comic Sans MS">Comic Sans MS</option>
+					     <option value="Georgia">Georgia</option>
+					     <option value="saab">Saab</option>
+					     <option value="opel">Opel</option>
+						 <option value="audi">Audi</option>
+					 </select>
+					 <span style="color: rgb(136,136,136)">Font Size:</span>
+					 <select id = "Font Size Selection">
+					     <option value="12">12</option>
+					     <option value="14">14</option>
+					     <option value="16">16</option>
+						 <option value="18">18</option>
+						 <option value="20">20</option>
+					     <option value="24">24</option>
+					     <option value="32">32</option>
+						 <option value="36">36</option>						 
+						 <option value="40">40</option>						 
+						 <option value="48">48</option>						 
+					 </select>
+				 </div>
+				 
 				 <!-- The Color Selection Canvas -->
-				 <input id="colorCanvas" class="jscolor {closable:true,closeText:'Close me!'}" value="cc4499">
+				 <input id="colorCanvas" class="jscolor {closable:true,closeText:'Close me!'}" value="9c44c9">
 				 
 				 <!-- The Post Card Canvas -->
 				 <canvas id="postCardCanvas"> </canvas>
