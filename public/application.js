@@ -135,7 +135,7 @@ function init() {
  
 	 
 	 // Hello World
-	 create_Text("Hello World!","20px Georgia", "Black", 10, 50);
+	 create_Text("Hello Mom!","20px Georgia", "CYAN", 100, 120);
 	 
 	 /**
 	 // Create gradient

@@ -48,28 +48,41 @@ Postal.on('connection', function (socket) {
 		 console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
 		 
 		 
+		 var AtLocation = data.sender.indexOf("@");
+		 var ComLocation = data.sender.lastIndexOf(".");
+		 console.log("service:");
+		 console.log(data.sender.substring(AtLocation+1,ComLocation));
+		 
+		 
 		 
 		 try{
 			 var transporter, recognizeEmail=true;
 			 
+			 
+			 
 			 // For Gmail
-			 if(data.sender.indexOf("@gmail.com")){
-				 transporter = nodemailer.createTransport({
-					  service: 'gmail',
-					  auth: {
-						user: data.sender,
-						pass: data.passW
-					  }
-				 });		
-			 }
+			 //if(data.sender.indexOf("@gmail.com")){
+			 transporter = nodemailer.createTransport({
+				  //service: data.sender.substring(AtLocation+1,ComLocation),
+				  service: 'gmail',
+				  auth: {
+					user: data.sender,
+					pass: data.passW
+				  }
+			 });		
+			 // List of services
+			 // https://nodemailer.com/smtp/well-known/ 
+			 
+			 
+			 //}
 			 // If the Account type is unrecognizable
-			 else{	
+			 //else{	
 				 recognizeEmail = false;
-			 }
+			 //}
 
 			 
 			 
-			 if(recognizeEmail){
+			 if(recognizeEmail || 5 >2){
 				 // Creates the package for the email
 				 var mailOptions = {
 					 from: data.sender,
@@ -80,13 +93,56 @@ Postal.on('connection', function (socket) {
 				 
 				 // Sends out the Email
 				 transporter.sendMail(mailOptions, function(error, info){
-					 var message = "Your Post Card has been sent."
+					 var message = "Your Post Card has been sent.";
+					 var receipt = null;
+					 var firewall = null;
+					 
 					 if (error) {
-						 console.log(error);
-						 message = "Your Post Card was not sent."
+						 
+						 
+						 
+						 
+						 // No receipt defined
+						 if((""+error).indexOf('No recipients defined')>=0){
+							 message = "Double-Check to make sure the receipt's email address is correct."
+							 receipt = true;
+						 }
+						 // Email Firewall Prevented Nodemailer
+						 else if(error.code == 'ECONNECTION' && error.errno == 'ECONNREFUSED'){
+							 message = "Your Email's firewall prevented us from sending the PostCard."
+							 firewall = true;
+							 
+							 
+							 // https://stackoverflow.com/questions/14654736/nodemailer-econnrefused
+						 }
+						 
+						 // Else.... shoot lol IDK
+						 else{
+							 
+							 
+							 // FULL REPORT
+							 // console.log(error);
+							 
+							 // Top of the Report lol First 75 words....
+							 console.log((">"+error).substring(0,76));
+							 
+							 
+							 message = "Your Post Card was not sent."
+							 
+							 
+							 
+						 }
+					 
 						 accountErrorRemoval(data.sender);
-						 Postal.emit('Error', data={ message : message});		
-					 } else {
+						 var statusData = {
+							 message : message,
+							 receipt : receipt,
+							 firewall: firewall
+						 }
+						 
+						 Postal.emit('Error', statusData);	
+					 }
+					 else {
 						 console.log('Email sent: ' + info.response);
 						 Postal.emit('Error', data={ message : message});	
 						 addPictureToHistory(data.sender,data.picture,data.receipt);					 
