@@ -37,24 +37,18 @@ Postal.on('connection', function (socket) {
 	 
 	 
 	 /** Send Email Please
-		 
+		 For this function to run properly, it needs to be
+		 run asynchronous. So this function will be using
+		 async, await and promises to determine the emails
+		 service type.
 	 **/
 	 socket.on('Send Email Please', async function(data){
-		 //console.log(data);
 		 
 		 doesThisUserAlreadyExist(data.sender);
-		 console.log(new Date());
-		 console.log(usersAccounts[usersAccounts.length-1]);
-		 console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
-		 
-		 /**
-		 var AtLocation = data.sender.indexOf("@");
-		 var ComLocation = data.sender.lastIndexOf(".");
-		 console.log("service:");
-		 console.log(data.sender.substring(AtLocation+1,ComLocation));
-		 **/
-		 
-		 
+		 //console.log(new Date());
+		 //console.log(usersAccounts[usersAccounts.length-1]);
+		 //console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
+		  
 		 try{
 			 var transporter, recognizeEmail=true;
 			 
@@ -62,9 +56,8 @@ Postal.on('connection', function (socket) {
 				 Additionally to allocate enough time to determine the
 				 service type. Await and Async will be used.
 			 **/
-			 var service = await findEmailServiceOrReturnError(data.sender);
-			 console.log("service: "+service); // 10
-			 
+			 var service = await findEmailService(data.sender);
+			 console.log("service: "+service); // 10			 
 			 
 			 transporter = nodemailer.createTransport({
 				  service: service,
@@ -75,92 +68,91 @@ Postal.on('connection', function (socket) {
 			 });		
 			 
 			 
-			 //}
+			 // }
 			 // If the Account type is unrecognizable
 			 //else{	
 				 recognizeEmail = false;
-			 //}
+			 // }
 
 			 
+			 // Creates the package for the email
+			 var mailOptions = {
+				 from: data.sender,
+				 to: data.receipt,
+				 subject: data.subject,
+				 html: data.picture
+			 };
 			 
-			 if(recognizeEmail || 5 >2){
-				 // Creates the package for the email
-				 var mailOptions = {
-					 from: data.sender,
-					 to: data.receipt,
-					 subject: data.subject,
-					 html: data.picture
-				 };
+			 // Sends out the Email
+			 transporter.sendMail(mailOptions, function(error, info){
+				 var message = "Your Post Card has been sent.";
+				 var receipt = null;
+				 var firewall = null;
+				 var serviceProviders = null;
+				 var usernameANDpassword = null;
 				 
-				 // Sends out the Email
-				 transporter.sendMail(mailOptions, function(error, info){
-					 var message = "Your Post Card has been sent.";
-					 var receipt = null;
-					 var firewall = null;
-					 var usernameANDpassword = null;
-					 
-					 if (error) {
-						 
-						 
-						 
-						 
-						 // No receipt defined
-						 if((""+error).indexOf('No recipients defined')>=0){
-							 message = "Double-Check to make sure the receipt's email address is correct."
-							 receipt = true;
-						 }
-						 // Email Firewall Prevented Nodemailer
-						 else if(error.code == 'ECONNECTION' && error.errno == 'ECONNREFUSED'){
-							 message = "Your Email's firewall prevented us from sending the PostCard."
-							 firewall = true;
-							 
-							 
-							 // https://stackoverflow.com/questions/14654736/nodemailer-econnrefused
-						 }
-						 // Both the username and password error
-						 else if((""+error).indexOf('Username and Password not accepted')>=0){
-						 
-							 message = "Your Email Address and Password appears to be incorrect."
-							 usernameANDpassword = true;
-						 }
-						 // 
-						 else if((""+error).indexOf('Invalid login: 535 Error: authentication failed')>=0){
-						 
-							 message = "Error: authentication failed... idk"
-							 // FULL REPORT
-							 console.log(error);
-							 // usernameANDpassword = true;
-						 }
-						 
-						 // Else.... shoot lol IDK
-						 else{
-							 // FULL REPORT
-							 // console.log(error);
-							 
-							 // Top of the Report lol First 75 words....
-							 console.log((">"+error).substring(0,76));
-							 
-							 
-							 message = "Your Post Card was not sent."
-						 }
-					 
-						 accountErrorRemoval(data.sender);
-						 var statusData = {
-							 message : message,
-							 firewall: firewall,
-							 receipt : receipt,							 
-							 usernameANDpassword : usernameANDpassword
-						 }
-						 
-						 Postal.emit('Error', statusData);	
+				 // If an error Occured... Handle it!!!
+				 if (error) {
+					 // No receipt defined
+					 if((""+error).indexOf('No recipients defined')>=0){
+						 message = "Double-Check to make sure the receipt's email address is correct.";
+						 receipt = true;
 					 }
-					 else {
-						 console.log('Email sent: ' + info.response);
-						 Postal.emit('Error', data={ message : message});	
-						 addPictureToHistory(data.sender,data.picture,data.receipt);					 
+					 // Email Firewall Prevented Nodemailer
+					 else if(error.code == 'ECONNECTION' && error.errno == 'ECONNREFUSED'){
+						 message = "Your Email's firewall prevented us from sending the PostCard.";
+						 firewall = true;			
+						 // https://stackoverflow.com/questions/14654736/nodemailer-econnrefused
 					 }
-				 });
-			 }
+					 // Both the username and password error
+					 else if((""+error).indexOf('Username and Password not accepted')>=0){					 
+						 message = "Your Email Address and Password appears to be incorrect.";
+						 usernameANDpassword = true;
+					 }
+					 // 
+					 else if((""+error).indexOf('Invalid login: 535 Error: authentication failed')>=0){
+						 message = "Error: Sorry, we weren't able to authentication that email address.";
+					 }
+					 // Missing Credentials from the User
+					 else if((""+error).indexOf('Missing credentials for "PLAIN')>=0){
+						 message = "Error: It appears that some of your credentials are missing";
+						 usernameANDpassword = null;
+					 }
+					 // Lol Most Likely..... our guess for the Service provider was wrong
+					 else if((""+error).indexOf('Invalid login: 535 5.7.3 Authentication unsuccessful')>=0){
+						 message = "Error: We weren't able to locate your email's service providers... can you type the name of your providers? (gmail? yahoo? hotmail?)";
+						 usernameANDpassword = null;
+					 }
+					 
+					 // Else.... shoot lol IDK
+					 else{
+						 // FULL REPORT
+						 // console.log(error);
+						 
+						 // Top of the Report lol Print the First 100 characters....
+						 console.log((">"+error).substring(0,100));
+						 
+						 
+						 message = "Your Post Card was not sent."
+					 }
+				 
+					 accountErrorRemoval(data.sender);
+					 var statusData = {
+						 message : message,
+						 firewall: firewall,
+						 receipt : receipt,
+						 serviceProviders : serviceProviders,						 
+						 usernameANDpassword : usernameANDpassword
+					 }
+					 
+					 Postal.emit('Error', statusData);	
+				 }
+				 else {
+					 console.log('Email sent: ' + info.response);
+					 Postal.emit('Sent', data={ message : message});	
+					 addPictureToHistory(data.sender,data.picture,data.receipt);					 
+				 }
+			 });
 		 }
 		 catch(e){
 			 
@@ -268,7 +260,7 @@ Postal.on('connection', function (socket) {
 			 }
 	 }
 	 
-	 /**
+	 /** Find The Email Service Or Return OutLook365
 		 Find Email Service or return OutLook365
 		 Searches to find a suitable email address,
 		 if one is not found then it'll automatically
@@ -277,7 +269,7 @@ Postal.on('connection', function (socket) {
 		 can use that instead there own name but the
 		 service is under OutLook365. 
 	 **/
-	 function findEmailServiceOrReturnError(emailAddress){
+	 function findEmailService(emailAddress){
 		 var AtSignLocation = emailAddress.indexOf("@");
 		 var addressAfterTheAtSign=emailAddress.substring(AtSignLocation);
 		 
@@ -285,8 +277,6 @@ Postal.on('connection', function (socket) {
 			 The source for the list of Supported Services
 			 https://nodemailer.com/smtp/well-known/
 		 **/
-		 
-		 
 		 return new Promise(resolve => {
 			 setTimeout(() => {
 			     var service = 'Outlook365';	
@@ -351,9 +341,111 @@ Postal.on('connection', function (socket) {
 				 else if(addressAfterTheAtSign.indexOf('iCloud')>=0){
 					 service = 'iCloud'			 
 				 }
-				
-				
-				
+				 // mail.ee
+				 else if(addressAfterTheAtSign.indexOf('mail.ee')>=0){
+					 service = 'mail.ee'			 
+				 }
+				 // Mail.ru
+				 else if(addressAfterTheAtSign.indexOf('Mail.ru')>=0){
+					 service = 'Mail.ru'			 
+				 }
+				 // Maildev
+				 else if(addressAfterTheAtSign.indexOf('Maildev')>=0){
+					 service = 'Maildev'			 
+				 }
+				 // Mailgun
+				 else if(addressAfterTheAtSign.indexOf('Mailgun')>=0){
+					 service = 'Mailgun'			 
+				 }
+				 // Mailjet
+				 else if(addressAfterTheAtSign.indexOf('Mailjet')>=0){
+					 service = 'Mailjet'			 
+				 }
+				 // Mailosaur
+				 else if(addressAfterTheAtSign.indexOf('Mailosaur')>=0){
+					 service = 'Mailosaur'			 
+				 }
+				 // Mandrill
+				 else if(addressAfterTheAtSign.indexOf('Mandrill')>=0){
+					 service = 'Mandrill'			 
+				 }
+				 // Naver
+				 else if(addressAfterTheAtSign.indexOf('Naver')>=0){
+					 service = 'Naver'			 
+				 }
+				 // OpenMailBox
+				 else if(addressAfterTheAtSign.indexOf('OpenMailBox')>=0){
+					 service = 'OpenMailBox'			 
+				 }
+				 // Outlook365
+				 else if(addressAfterTheAtSign.indexOf('Outlook365')>=0){
+					 service = 'Outlook365'			 
+				 }
+				 // Postmark
+				 else if(addressAfterTheAtSign.indexOf('Postmark')>=0){
+					 service = 'Postmark'			 
+				 }
+				 // QQ
+				 else if(addressAfterTheAtSign.indexOf('QQ')>=0){
+					 service = 'QQ'			 
+				 }
+				 // QQex
+				 else if(addressAfterTheAtSign.indexOf('QQex')>=0){
+					 service = 'QQex'			 
+				 }
+				 // SendCloud
+				 else if(addressAfterTheAtSign.indexOf('SendCloud')>=0){
+					 service = 'SendCloud'			 
+				 }
+				 // SendGrid
+				 else if(addressAfterTheAtSign.indexOf('SendGrid')>=0){
+					 service = 'SendGrid'			 
+				 }
+				 // SendinBlue
+				 else if(addressAfterTheAtSign.indexOf('SendinBlue')>=0){
+					 service = 'SendinBlue'			 
+				 }
+				 // SendPulse
+				 else if(addressAfterTheAtSign.indexOf('SendPulse')>=0){
+					 service = 'SendPulse'			 
+				 }
+				 // SES
+				 else if(addressAfterTheAtSign.indexOf('SES')>=0){
+					 service = 'SES'			 
+				 }
+				 // SES-US-EAST-1
+				 else if(addressAfterTheAtSign.indexOf('SES-US-EAST-1')>=0){
+					 service = 'SES-US-EAST-1'			 
+				 }
+				 // SES-EU-WEST-1
+				 else if(addressAfterTheAtSign.indexOf('SES-EU-WEST-1')>=0){
+					 service = 'SES-EU-WEST-1'			 
+				 }
+				 // SES-US-WEST-2
+				 else if(addressAfterTheAtSign.indexOf('SES-US-WEST-2')>=0){
+					 service = 'SES-US-WEST-2'			 
+				 }
+				 // Sparkpost
+				 else if(addressAfterTheAtSign.indexOf('Sparkpost')>=0){
+					 service = 'Sparkpost'			 
+				 }
+				 // Yahoo
+				 else if(addressAfterTheAtSign.indexOf('Yahoo')>=0){
+					 service = 'Yahoo'			 
+				 }
+				 // Yandex
+				 else if(addressAfterTheAtSign.indexOf('Yandex')>=0){
+					 service = 'Yandex'			 
+				 }
+				 // Zoho
+				 else if(addressAfterTheAtSign.indexOf('Zoho')>=0){
+					 service = 'Zoho'			 
+				 }
+				 // qiye.aliyun
+				 else if(addressAfterTheAtSign.indexOf('qiye.aliyun')>=0){
+					 service = 'qiye.aliyun'			 
+				 }
+				 
 			     resolve(service);
 			 }, 3000);
 	     });
@@ -364,101 +456,6 @@ Postal.on('connection', function (socket) {
 	 }
 	 
 	 
-	 function resolveServicesAfter3Seconds(emailAddress) { 
-		 return new Promise(resolve => {
-			 setTimeout(() => {
-			     findEmailServiceOrReturnError(emailAddress);
-			 }, 2000);
-	     });
-	 }
-	 
-	 // --- old
-	 // A user is Logs into the account
-	 socket.on('Account Login', function(data){
-		 console.log("A user with the email '"+data.user+"' is trying to log in");
-		 isTheEmailUsable(socket.id, data.user, data.pass);
-	 });
-	 
-	 // User sends us text and image to email
-	 socket.on('Mail', function(data){
-		 
-		 console.log(data);
-		 console.log("MAILING....");
-		 
-		 // Creates the package for the email
-		 var mailOptions = {
-		     //from: usersAccounts[0].user,
-		     from: usersAccounts[0].user,
-			 to: 'youngj25@southernct.edu',
-			 subject: data.subject,
-			 //text: 'That was easy!'
-			 html: data.text
-		 };
-		 
-		 // Sends out the Email
-		 usersAccounts[0].transporter.sendMail(mailOptions, function(error, info){
-			 var message = "Your Post Card has been sent."
-			 if (error) {
-				 console.log(error);
-				 message = "Your Post Card was not sent."
-				 Postal.emit('Error', data={ message : message});		
-			 } else {
-				 console.log('Email sent: ' + info.response);
-				 Postal.emit('Error', data={ message : message});		
-			 }
-		 });
-		 
-	 });
-	 
-	 // Verifies the Email Address and Finds out if the user already has an account
-	 function isTheEmailUsable(socketID, user, pass){
-		 var transporter, recognizeEmail = true;
-		 console.log("Received....");
-		 try{
-			 // If it's an Gmail Account
-			 if(user.indexOf("@gmail.com")){
-				 transporter = nodemailer.createTransport({
-					  service: 'gmail',
-					  auth: {
-						user: user,
-						pass: pass
-					  }
-				 });		
-			 }
-			 
-			 // If the Account type is unrecognizable
-			 else{			 				 
-				 recognizeEmail = false;
-				 // Force an Error
-				 var x = 3/0;
-			 } 
-
-			 // Just to be on the safe side
-			 if(recognizeEmail){
-				 var account = {
-					 user: user,
-					 pass: pass, // I'll reset this once the User disconnects
-					 history:[],
-					 socket: socketID,
-					 transporter : transporter
-				 };
-				 
-				 usersAccounts.push(account);
-			 }
-			 console.log("Finish Adding the user.");
-			 Postal.emit('Account Logged In');
-		 }
-		 catch(e){
-			 if(recognizeEmail)
-				 console.log("Email/Password is no good...");
-			 else 
-				 console.log("Do not recognize this Email");
-		 }
-	 
-	 
-	 
-	 }
- 
 	 //Disconnecting player
 	 socket.on('disconnect', function() {			
 		 console.log("Disconnected");	

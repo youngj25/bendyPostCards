@@ -39,16 +39,6 @@ body{
 	 margin-right:auto;	
 }
 
-#yourEmailInfo{
-	 background-color: grey;
-	 display:none;
-	 margin-left:auto;
-	 margin-right:auto;		
-	 max-width: 550px;
-	 width: 75%;
-	 border: 3px solid rgb(0,0,95);
-}
-
 #postCardCreator{
 	 display:inline;
 	 margin-left:auto;
@@ -71,6 +61,16 @@ body{
 	 /* width: 75%; */
 	 border: 3px solid rgb(0,0,95);
 	 overflow: hidden;
+}
+
+#textToolsCanvas{
+	 background-color: grey;
+	 display:none;
+	 margin-left:auto;
+	 margin-right:auto;		
+	 max-width: 550px;
+	 width: 75%;
+	 border: 3px solid rgb(0,0,95);
 }
 
 #colorCanvas{

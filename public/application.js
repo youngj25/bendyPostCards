@@ -255,13 +255,28 @@ function init() {
 					 document.getElementById("colorCanvas").style.display = "none";
 					 webApplicationState = "WebCam Canvas";
 					 
-					 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+					 
+					 // Video Setup using navigator.mediaDevices.getUserMedia
+					 // Source: https://www.youtube.com/watch?v=Hc7GE3ENz7k
+					 const video = document.getElementById("vidDisplay");
+					 navigator.mediaDevices.getUserMedia({
+						 audio:false,
+						 video:true
+					 }). then (stream =>{
+						 video.srcObject = stream;
+					 }).catch(useNavigatorGetUserMedia()); // In case this fails... call navigator.getUserMedia
+					 
+					 
+					 function useNavigatorGetUserMedia(){
+						 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
 											  navigator.msGetUserMedia || navigator.oGetUserMedia;
-											  
-					 if(navigator.getUserMedia){
-						 navigator.getUserMedia({video:true},handleVideo, videoError);
+						 
+						 if(navigator.getUserMedia){
+							 navigator.getUserMedia({video:true},handleVideo, videoError);
+						 }
 					 }
-				 
+					 
+					 
 					 function handleVideo(stream){
 						 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
 						 document.querySelector('#vidDisplay').srcObject = stream;
@@ -269,12 +284,12 @@ function init() {
 					 
 					 function videoError(e){
 						 alert("There has been some problem");
-					 }																				 
+						 console.error;
+					 }	
 				 }
 				 else if (event.object.name == "text"){
 					 if(event.object.ON && webApplicationState == "Text Addition"){
-						 console.log("Text Mode ON");
-						 
+						 document.getElementById("textToolsCanvas").style.display = "none";
 						 
 						 // Correcting the Buttons
 						 for(var x = 0; x< buttons.length; x++)
@@ -301,9 +316,7 @@ function init() {
 						 webApplicationState = "Text Addition";
 						 event.object.ON = true;
 						 
-						 //create_Text("Hello World!","20px Georgia", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
-						 
-						
+						 document.getElementById("textToolsCanvas").style.display = "block";
 						 var text = document.getElementById("textTool").value;
 						 var fontStyle = document.getElementById("Font Selection").value;
 						 var fontSize = document.getElementById("Font Size Selection").value;
@@ -694,12 +707,44 @@ function init() {
 	 document.addEventListener('keydown', onKeyDown, false);
 	 
 	 /** On Click Functions for the PostCard Canvas
-	 function onCanvasButtonClick(){
-		 console.log("clicked");
+		 If the web application status is currently "Text Addition"
+		 allow for the user to added text to the canvas wherever they
+		 click...
+	 **/
+	 function onCanvasButtonClick(event){
+		 if(webApplicationState == "Text Addition"){
+			 //https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
+			 console.log("clicked");
+			 console.log(event);
+			 //var xPos = (event.clientX - (postCardCanvas.offsetLeft+postCardCanvas.width));
+			 var xPos = (event.clientX - postCardCanvas.left);
+			 var yPos = event.clientY - postCardCanvas.top;
+			 console.log(postCardCanvas);
+			 
+			 /**
+			 var xPos,yPos;
+			 if (event.pageX || event.pageY) { 
+				 xPos = event.pageX;
+				 yPos = event.pageY;
+				 console.log('pages');
+			 }
+			 else { 
+				 xPos = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+				 yPos = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+				 console.log('comp.');
+			 } 
+			 xPos -= postCardCanvas.offsetLeft;
+			 yPos -= postCardCanvas.offsetTop;
+			**/
+			 console.log(xPos);
+			 console.log(yPos);
+			 
+			 create_Text("+","10px Arial", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, xPos, yPos);
+		 }
+		 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
-	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
-	 **/
+	 
 	  
 	 // Window Resize Event
 	 function onWindowResize(){
