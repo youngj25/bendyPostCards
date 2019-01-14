@@ -45,10 +45,7 @@ Postal.on('connection', function (socket) {
 	 socket.on('Send Email Please', async function(data){
 		 
 		 doesThisUserAlreadyExist(data.sender);
-		 //console.log(new Date());
-		 //console.log(usersAccounts[usersAccounts.length-1]);
-		 //console.log("Number of users:"+usersAccounts.length+" history size:"+usersAccounts[0].history.length);
-		  
+		 
 		 try{
 			 var transporter, recognizeEmail=true;
 			 
@@ -454,8 +451,7 @@ Postal.on('connection', function (socket) {
 		 
 		 
 	 }
-	 
-	 
+	  
 	 //Disconnecting player
 	 socket.on('disconnect', function() {			
 		 console.log("Disconnected");	

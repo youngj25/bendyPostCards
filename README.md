@@ -63,5 +63,7 @@ If you use any external libraries or code-snippets, you must provide the followi
   
   
 What tools/libraries(and versions) are necessary to use and test your application
-  - Node.js/Express.js
-    - It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
+	 - Node.js/Express.js
+		 - It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
+  
+	 - Nodemailer

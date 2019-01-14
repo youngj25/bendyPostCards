@@ -106,11 +106,8 @@ function init() {
 		 webApplicationState = "Awaiting Response";
 		 dots=-1;
 	 });
-
-
 	  
 	 // postCardCanvasContext - HTML5 Canvas --------------------------------------
-	 
 	 // Post Card Canvas - HTML5 Canvas
 	 var postCardCanvas = document.getElementById("postCardCanvas");
 	 var postCardCanvasContext = postCardCanvas.getContext("2d");
@@ -705,15 +702,26 @@ function init() {
 			 // console.log(xPos);
 			 // console.log(yPos);
 			 
-			 create_Text(""+document.getElementById("textTool").value,
-						 document.getElementById("Font Size Selection").value+"px "+document.getElementById("Font Selection").value,
-						 '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, xPos, yPos);
+			 // Checks to see whether the inserted text meet the restrictions
+			 var text = ""+document.getElementById("textTool").value;
+			 var fontSize = document.getElementById("Font Size Selection").value;
+			 var fontStyle = document.getElementById("Font Size Selection").value+"px "+document.getElementById("Font Selection").value;
+			 var color = '#'+document.getElementById("colorCanvas").jscolor.valueElement.value;
+			 
+			 if(text.trim().length!=0){
+				 // If somebody tryna pull pranks with Spaces.... stop it 
+				 if(text.trim().length==1) text = text.trim();
+				 
+				 //console.log(text);
+				 // Go Create the Text
+				 create_Text(text, fontStyle, color, xPos-fontSize*text.length/4, yPos-fontSize/8);
+			 }
+			 else console.log("Failed text Restrictions");
 		 }
 		 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
-	 
-	  
+	   
 	 // Window Resize Event
 	 function onWindowResize(){
 		 renderer.setSize(window.innerWidth*.7, 50);
