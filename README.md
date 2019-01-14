@@ -25,6 +25,8 @@ Additionally, a text box input was decided for the text inclusion such that mobi
 ### Future Development
 In the future development, it would be nice to incorporate features like drag and drop insertions for pictures and eventually produce gifs. More importantly, a great deal of focus would be spent to ensure that the scaling and proportion of the web application is appropriate regardless of the device screen.
 
+Another area that definitely needs work is the help feature, that guides new users how to use the application...
+
 Additionally a problem that is still persisting, if a users enters an email like mines for example ,"youngj25@southernct.edu", it is difficult to identify which email service this email address truly belongs to. There are numerous other email address that probably refer to school/work that is really apart of a different services. By default, the web server is set to 'Outlook365' if it can not determine the users web services, but there should be a better way to go about this.
 
 But most of all... to find a way to smoothly way to add the Gradient colors (for text/fills) to the application without making it too... complicated or making the page look too busy. 
