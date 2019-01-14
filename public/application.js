@@ -29,6 +29,11 @@ function init() {
 		 State 5 - 'Text Addition'
 			 In this state, the user can add text to the Canvas
 			 by typing on a keyboard.
+		 
+		 State 6 - 'Awaiting Response'
+			 In this state, the user has sent a request to send the
+			 Post card and we are awaiting the response from the 
+			 server.
 	 **/
 	 var webApplicationState = "PostCard Canvas";
 	 
@@ -36,8 +41,8 @@ function init() {
 	 document.querySelector('#vidDisplay').srcObject = null;
 	
 	 // Sockets -------------------------------------------
-	 // socket = io.connect('http://localhost:9000');
-	 socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
+	 socket = io.connect('http://localhost:9000');
+	 //socket = io.connect('http://ec2-34-205-146-82.compute-1.amazonaws.com:9000');
      
 	 // Incoming Sockets -------------------------------------------
 	 //The user has successfully logged in
@@ -51,14 +56,18 @@ function init() {
 	 // An error has occured with the sending the Post Card
 	 Postal.on('Error', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
+		 document.getElementById("results").style.display = "block";
 		 document.getElementById("results").style.color = "red";
-		 document.getElementById("yourEmailInfo").style.display = "inline";
+		 //document.getElementById("yourEmailInfo").style.display = "inline";
+		 webApplicationState = "Send PostCard";
 	 });
 	  
 	 // The PostCard has been sent
 	 Postal.on('Sent', function(data) {
 		 document.getElementById("results").innerHTML = data.message;
 		 document.getElementById("results").style.color = "blue";
+		 document.getElementById("results").style.display = "block";
+		 webApplicationState = "Send PostCard";
 	 });
 	  
 	 // Outgoing Sockets -------------------------------------------
@@ -85,20 +94,20 @@ function init() {
 	 // Send the Postcard to the server to be sent out
 	 document.getElementById("Send").addEventListener("click", function(){
 		 var data = {
+			 sender:  document.getElementById("yourEmailAddress").value,
+			 passW:   document.getElementById("yourEmailAddressPassword").value,
 			 receipt: document.getElementById("theirEmailAddress").value,
 			 subject: "Bendy Postal From Jason",
-			 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-			 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
+			 picture: '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
 		 }			 
 		
-		 //Postal.emit('Mail',data);
+		 Postal.emit('Send Email Please',data);
 		 console.log("mail");
+		 webApplicationState = "Awaiting Response";
+		 dots=-1;
 	 });
-
-
 	  
 	 // postCardCanvasContext - HTML5 Canvas --------------------------------------
-	 
 	 // Post Card Canvas - HTML5 Canvas
 	 var postCardCanvas = document.getElementById("postCardCanvas");
 	 var postCardCanvasContext = postCardCanvas.getContext("2d");
@@ -131,30 +140,6 @@ function init() {
 	 }
 	 canvasHistory.push(history);
 	 canvasHistoryPointer++;
- 
-	 
-	 // Hello World
-	 create_Text("Hello World!","20px Georgia", "Black", 10, 50);
-	 
-	 /**
-	 // Create gradient
-	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
-	 gradient.addColorStop("0", "Blue");
-	 gradient.addColorStop("0.5", "#850085");
-	 gradient.addColorStop("1", "Red");
-	 // Fill with gradient
-	 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
-	 
-	 
-	 
-	 **/
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 
 	 
 	 // Post Card Tools Canvas - Three.js -------------------------------------------
@@ -179,7 +164,7 @@ function init() {
 	 renderer.render(scene, camera);
 	 
 	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
-	  
+	 var steps = 0, dots=-1;
 	 var buttons = [];
 	 var objects = [];
 	 renderScene();
@@ -190,11 +175,28 @@ function init() {
 	 // Rendering
 	 function renderScene(){
 		 try{
+			 if(webApplicationState == "Awaiting Response")
+				 steps++;
+			 
 			 //Render steps
 			 //render using requestAnimationFrame
 			 requestAnimationFrame(renderScene);
 			 renderer.render(scene, camera);
-			 scene.traverse(function (e) {});
+			 scene.traverse(function (e) {
+				 if(webApplicationState == "Awaiting Response" && steps%30 == 0){
+					 dots =(dots+1)%7;
+					 var message= ".";
+					 
+					 for(var x=0; x<dots;x++)
+						 message+=".."
+					 
+					 document.getElementById("results").style.color = "white";
+					 document.getElementById("results").innerHTML = message;
+					 document.getElementById("results").style.display = "block";					 
+				 }
+				 
+				 
+			 });
 		 }catch(e){}
 	 }
 	
@@ -203,9 +205,9 @@ function init() {
 		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
 				
 			 dragControls.addEventListener( 'dragstart', function(event) {
-				 if (event.object.name == "undo" && webApplicationState == "PostCard Canvas")
+				 if (event.object.name == "undo")
 					 undo_Canvas_Change();
-				 else if (event.object.name == "redo" && webApplicationState == "PostCard Canvas")
+				 else if (event.object.name == "redo")
 					 redo_Canvas_Change();
 				 else if (event.object.name == "background" && webApplicationState == "PostCard Canvas"){
 					 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
@@ -226,13 +228,28 @@ function init() {
 					 document.getElementById("colorCanvas").style.display = "none";
 					 webApplicationState = "WebCam Canvas";
 					 
-					 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+					 
+					 // Video Setup using navigator.mediaDevices.getUserMedia
+					 // Source: https://www.youtube.com/watch?v=Hc7GE3ENz7k
+					 const video = document.getElementById("vidDisplay");
+					 navigator.mediaDevices.getUserMedia({
+						 audio:false,
+						 video:true
+					 }). then (stream =>{
+						 video.srcObject = stream;
+					 }).catch(useNavigatorGetUserMedia()); // In case this fails... call navigator.getUserMedia
+					 
+					 
+					 function useNavigatorGetUserMedia(){
+						 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
 											  navigator.msGetUserMedia || navigator.oGetUserMedia;
-											  
-					 if(navigator.getUserMedia){
-						 navigator.getUserMedia({video:true},handleVideo, videoError);
+						 
+						 if(navigator.getUserMedia){
+							 navigator.getUserMedia({video:true},handleVideo, videoError);
+						 }
 					 }
-				 
+					 
+					 
 					 function handleVideo(stream){
 						 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
 						 document.querySelector('#vidDisplay').srcObject = stream;
@@ -240,37 +257,33 @@ function init() {
 					 
 					 function videoError(e){
 						 alert("There has been some problem");
-					 }																				 
+						 console.error;
+					 }	
 				 }
 				 else if (event.object.name == "text"){
+					 // If the web application is already in 'Text Addition' mode
 					 if(event.object.ON && webApplicationState == "Text Addition"){
-						 console.log("Text Mode ON");
+						 document.getElementById("textToolsCanvas").style.display = "none";
 						 
-						 
-						 // Correcting the Buttons
-						 for(var x = 0; x< buttons.length; x++)
+						 // Correcting the Buttons not including the undo/redo buttons
+						 for(var x = 2; x< buttons.length; x++)
 							 buttons[x].material.color.setHex(0xffffff);
-						
-						 // Now check the Undo and Redo Buttons
-						 if(canvasHistoryPointer == 0)
-							 buttons[0].material.color.setHex(0x575757);
-						 else if(canvasHistoryPointer+1 >= canvasHistory.length)
-							 buttons[1].material.color.setHex(0x575757);
 						 
 						 webApplicationState = "PostCard Canvas";
 						 event.object.ON = false;
 					 }
+					 // If the web application is not already in 'Text Addition' mode
 					 else if(webApplicationState == "PostCard Canvas"){
-						 console.log("Text Mode OFF");
-						 
-						 for(var x = 0; x< buttons.length; x++)
+						 // Reducing the color of all the buttons colors except the undo/redo button
+						 for(var x = 2; x< buttons.length; x++)
 							 buttons[x].material.color.setHex(0x575757);
 						 
-						 buttons[4].material.color.setHex(0xffffff);
-						 
+						 buttons[4].material.color.setHex(0xffffff);						 
 						 
 						 webApplicationState = "Text Addition";
 						 event.object.ON = true;
+						 
+						 document.getElementById("textToolsCanvas").style.display = "block";
 					 }
 				 }
 				 else if (event.object.name == "send" && webApplicationState == "PostCard Canvas"){
@@ -485,12 +498,29 @@ function init() {
 		 I will be saving the text image and the actual
 		 text data into the history. 
 	 **/
-	 function create_Text(text,font, fillStyle, xCord, yCord){		 
+	 function create_Text(text,font, fillStyle, xCord, yCord){
+	 
+		 /** Future Development Ideas
+			 // Create gradient
+			 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
+			 gradient.addColorStop("0", "Blue");
+			 gradient.addColorStop("0.5", "#850085");
+			 gradient.addColorStop("1", "Red");
+			 // Fill with gradient
+			 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
+		 **/
+	 
 		 // Add Text to Canvas
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.font = font;	 
 		 postCardCanvasContext.fillText(text, xCord, yCord);		 
 		 postCardCanvasContext.save();
+		 
+		 // Just in case Splice the canvasHistory to make sure we are creating a new history
+		 canvasHistory.splice(canvasHistoryPointer+1);
+		 // Reset the Buttons
+		 buttons[0].material.color.setHex(0xffffff);
+		 buttons[1].material.color.setHex(0x575757);	
 		 
 		 // Add data into History
 		 var history = {
@@ -651,13 +681,47 @@ function init() {
 	 document.addEventListener('keydown', onKeyDown, false);
 	 
 	 /** On Click Functions for the PostCard Canvas
-	 function onCanvasButtonClick(){
-		 console.log("clicked");
+		 If the web application status is currently "Text Addition"
+		 allow for the user to added text to the canvas wherever they
+		 click...
+	 **/
+	 function onCanvasButtonClick(event){
+		 if(webApplicationState == "Text Addition"){
+			 //https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
+			 
+			 // Getting the Correct X coordinate of the click event
+			 var xPos = event.clientX - postCardCanvasContext.canvas.offsetLeft;
+			 xPos = xPos/postCardCanvasContext.canvas.offsetWidth;
+			 xPos = xPos*postCardCanvasContext.canvas.width;
+			 
+			 // Getting the Correct Y coordinate of the click event
+			 var yPos = event.clientY - postCardCanvasContext.canvas.offsetTop;
+			 yPos = yPos/postCardCanvasContext.canvas.offsetHeight;
+			 yPos = yPos*postCardCanvasContext.canvas.height;
+			 
+			 // console.log(xPos);
+			 // console.log(yPos);
+			 
+			 // Checks to see whether the inserted text meet the restrictions
+			 var text = ""+document.getElementById("textTool").value;
+			 var fontSize = document.getElementById("Font Size Selection").value;
+			 var fontStyle = document.getElementById("Font Size Selection").value+"px "+document.getElementById("Font Selection").value;
+			 var color = '#'+document.getElementById("colorCanvas").jscolor.valueElement.value;
+			 
+			 if(text.trim().length!=0){
+				 // If somebody tryna pull pranks with Spaces.... stop it 
+				 if(text.trim().length==1) text = text.trim();
+				 
+				 //console.log(text);
+				 // Go Create the Text
+				 create_Text(text, fontStyle, color, xPos-fontSize*text.length/4, yPos-fontSize/8);
+			 }
+			 else console.log("Failed text Restrictions");
+		 }
+		 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
-	 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
-	 **/
-	  
+	   
 	 // Window Resize Event
 	 function onWindowResize(){
 		 renderer.setSize(window.innerWidth*.7, 50);
@@ -694,7 +758,9 @@ function init() {
 		 }
 		 else if(webApplicationState == "Send PostCard"){
 			 document.getElementById("receiptEmail").style.display = "none";
+			 document.getElementById("results").style.display = "none";
 			 document.getElementById("postCardToolsCanvas").style.display = "block";
+			 document.getElementById("results").innerHTML = "";
 		 }
 		 
 		 document.getElementById("go_Back_Button").style.display = "none";

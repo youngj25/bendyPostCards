@@ -22,41 +22,48 @@ Any design decisions or behavioral clarifications that illustrate how you progra
 
 The initial plans were for the user to enter an email address and password, then for the server to validate/send a test email to the specificed email address prior to letting the user access the Post Card creator. However, after developing the web application, it became apparent that this idea was flawed and it would be best to leave the web application itself easily acessible, then when the user wants to send the postcard have them input the following information. However, the user will still have to provide a working email address and password to get access to an email postcard history.
 
+The Client will only communicate with the Server in two scenarios... When the Client wants to send the postcard or when the user tries to view their history.
 
 If you use any external libraries or code-snippets, you must provide the following information for each (credit must be given to others):
   - Name
-  - Version
-  - Purpose
-  - License
-  - Websites
+	 - Version
+	 - Purpose
+	 - License
+	 - Websites
+  
   
   - Bootstrap
-  - Version: 4.0.0
-  - Purpose: 
-  - License:
-  - Websites:
+	 - Version: 4.0.0
+	 - Purpose: 
+	 - License:
+	 - Websites:
+  
   
   - jsColor
-  - Version: 2.0.5
-  - Purpose: Canvas/Text Color Selection
-  - License: GNU GPL license v3
-  - Websites: http://jscolor.com/
+	 - Version: 2.0.5
+	 - Purpose: Canvas/Text Color Selection
+	 - License: GNU GPL license v3
+	 - Websites: http://jscolor.com/
+  
   
   - Socket.io
-  - Version: 2.1.1
-  - Purpose: Fast/Light Weight Communication between client and server
-  - License:
-  - Websites:
+	 - Version: 2.1.1
+	 - Purpose: Fast/Light Weight Communication between client and server
+	 - License:
+	 - Websites:
+  
   
   - Three.js
-  - Version: r83
-  - Purpose: Canvas Toolbar
-  - License: MIT License
-  - Websites: http://threejs.org/
+	 - Version: r83
+	 - Purpose: Canvas Toolbar
+	 - License: MIT License
+	 - Websites: http://threejs.org/
   
   
   
   
 What tools/libraries(and versions) are necessary to use and test your application
-  - Node.js/Express.js
-    - It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
+	 - Node.js/Express.js
+		 - It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
+  
+	 - Nodemailer
