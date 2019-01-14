@@ -27,6 +27,8 @@ In the future development, it would be nice to incorporate features like drag an
 
 Additionally a problem that is still persisting, if a users enters an email like mines for example ,"youngj25@southernct.edu", it is difficult to identify which email service this email address truly belongs to. There are numerous other email address that probably refer to school/work that is really apart of a different services. By default, the web server is set to 'Outlook365' if it can not determine the users web services, but there should be a better way to go about this.
 
+But most of all... to find a way to smoothly way to add the Gradient colors (for text/fills) to the application without making it too... complicated or making the page look too busy. 
+
 
 ## What frameworks/tools/libraries(and versions) are necessary to use and test your application:
   - Node.js/Express.js
@@ -98,11 +100,15 @@ Additionally a problem that is still persisting, if a users enters an email like
   - Navigator.getUserMedia
     - Purpose: Incase Navigator.mediaDevices.getUserMedia incase unavailable for some reason. 
     - Website: https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
-  - Displaying the Video Stream for 
-    - Purpose
+  - Displaying the Video Stream 
+    - Purpose: Allow the application to take the webcam stream and render it in the video tags
     - Website: https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
-						
-    
+  - Take an Image (Picture) From the Webcam
+    - Purpose: Allow the application to take a picture of the application and then add it to the canvas
+    - Website: https://stackoverflow.com/questions/23745988/get-an-image-from-the-video
+  - Stops the Webcam after the camera is done
+    - Purpose: Stops the webcam after the users is done using that feature
+    - Website: https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
     
     
     
