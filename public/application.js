@@ -143,24 +143,6 @@ function init() {
 	 }
 	 canvasHistory.push(history);
 	 canvasHistoryPointer++;
- 
-	 
-	 /** Future Development Ideas
-	 // Create gradient
-	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
-	 gradient.addColorStop("0", "Blue");
-	 gradient.addColorStop("0.5", "#850085");
-	 gradient.addColorStop("1", "Red");
-	 // Fill with gradient
-	 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
-	 **/
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 
 	 
 	 // Post Card Tools Canvas - Three.js -------------------------------------------
@@ -519,7 +501,18 @@ function init() {
 		 I will be saving the text image and the actual
 		 text data into the history. 
 	 **/
-	 function create_Text(text,font, fillStyle, xCord, yCord){		 
+	 function create_Text(text,font, fillStyle, xCord, yCord){
+	 
+		 /** Future Development Ideas
+			 // Create gradient
+			 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
+			 gradient.addColorStop("0", "Blue");
+			 gradient.addColorStop("0.5", "#850085");
+			 gradient.addColorStop("1", "Red");
+			 // Fill with gradient
+			 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
+		 **/
+	 
 		 // Add Text to Canvas
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.font = font;	 
