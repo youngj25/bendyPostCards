@@ -25,18 +25,11 @@ The initial plans were for the user to enter an email address and password, then
 The Client will only communicate with the Server in two scenarios... When the Client wants to send the postcard or when the user tries to view their history.
 
 If you use any external libraries or code-snippets, you must provide the following information for each (credit must be given to others):
-  - Name
-	 - Version
-	 - Purpose
-	 - License
-	 - Websites
-  
-  
   - Bootstrap
 	 - Version: 4.0.0
-	 - Purpose: 
-	 - License:
-	 - Websites:
+	 - Purpose: Web Page Styling
+	 - License: MIT license
+	 - Websites: https://getbootstrap.com/
   
   
   - jsColor
@@ -49,8 +42,8 @@ If you use any external libraries or code-snippets, you must provide the followi
   - Socket.io
 	 - Version: 2.1.1
 	 - Purpose: Fast/Light Weight Communication between client and server
-	 - License:
-	 - Websites:
+	 - License: MIT License
+	 - Websites: https://socket.io/
   
   
   - Three.js
@@ -59,11 +52,12 @@ If you use any external libraries or code-snippets, you must provide the followi
 	 - License: MIT License
 	 - Websites: http://threejs.org/
   
+ 
   
+What tools/libraries(and versions) are necessary to use and test your application:
+
+  - Node.js/Express.js
+	- It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
   
-  
-What tools/libraries(and versions) are necessary to use and test your application
-	 - Node.js/Express.js
-		 - It is more convenient working with one language, Javascript, on both the Server and Client side. For that reason, Node.js/Express.js was chosen. 
-  
-	 - Nodemailer
+  - Nodemailer
+  	- Convenient way to send emails with Node.js server
