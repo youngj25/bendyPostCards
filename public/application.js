@@ -146,7 +146,7 @@ function init() {
  
 	 
 	 // Hello World
-	 create_Text("Hello Mom!","20px Georgia", "CYAN", 100, 120);
+	 //create_Text("Hello World!","20px Georgia", "CYAN", 100, 120);
 	 
 	 /**
 	 // Create gradient
@@ -317,13 +317,13 @@ function init() {
 						 event.object.ON = true;
 						 
 						 document.getElementById("textToolsCanvas").style.display = "block";
-						 var text = document.getElementById("textTool").value;
-						 var fontStyle = document.getElementById("Font Selection").value;
-						 var fontSize = document.getElementById("Font Size Selection").value;
-						 console.log(text);
-						 console.log(fontStyle);
-						 console.log(fontSize);
-						 create_Text(text,fontSize+"px "+fontStyle, '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
+						// var text = document.getElementById("textTool").value;
+						 //var fontStyle = document.getElementById("Font Selection").value;
+						 //var fontSize = document.getElementById("Font Size Selection").value;
+						// console.log(text);
+						// console.log(fontStyle);
+						 //console.log(fontSize);
+						 //create_Text(text,fontSize+"px "+fontStyle, '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
 						 
 					 
 					 }
@@ -714,33 +714,35 @@ function init() {
 	 function onCanvasButtonClick(event){
 		 if(webApplicationState == "Text Addition"){
 			 //https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
-			 console.log("clicked");
-			 console.log(event);
-			 //var xPos = (event.clientX - (postCardCanvas.offsetLeft+postCardCanvas.width));
-			 var xPos = (event.clientX - postCardCanvas.left);
-			 var yPos = event.clientY - postCardCanvas.top;
-			 console.log(postCardCanvas);
 			 
-			 /**
-			 var xPos,yPos;
-			 if (event.pageX || event.pageY) { 
-				 xPos = event.pageX;
-				 yPos = event.pageY;
-				 console.log('pages');
-			 }
-			 else { 
-				 xPos = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-				 yPos = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
-				 console.log('comp.');
-			 } 
-			 xPos -= postCardCanvas.offsetLeft;
-			 yPos -= postCardCanvas.offsetTop;
-			**/
-			 console.log(xPos);
-			 console.log(yPos);
+			 // Getting the Correct X coordinate of the click event
+			 var xPos = event.clientX - postCardCanvasContext.canvas.offsetLeft;
+			 xPos = xPos/postCardCanvasContext.canvas.offsetWidth;
+			 xPos = xPos*postCardCanvasContext.canvas.width;
 			 
-			 create_Text("+","10px Arial", '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, xPos, yPos);
+			 // Getting the Correct Y coordinate of the click event
+			 var yPos = event.clientY - postCardCanvasContext.canvas.offsetTop;
+			 yPos = yPos/postCardCanvasContext.canvas.offsetHeight;
+			 yPos = yPos*postCardCanvasContext.canvas.height;
+			 
+			 // console.log(xPos);
+			 // console.log(yPos);
+			 
+			 create_Text(""+document.getElementById("textTool").value,
+						 document.getElementById("Font Size Selection").value+"px Arial",
+						 '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, xPos, yPos);
 		 }
+		 /** Developing the Click Function
+		 else{
+			 console.log("X:"+event.pageX+" Y:"+event.pageY);
+			 console.log(postCardCanvasContext);
+			 //Width
+			 console.log(postCardCanvasContext.canvas.offsetWidth); //**
+			 console.log(postCardCanvasContext.canvas.offsetHeight); //**
+			 console.log(postCardCanvasContext.canvas.offsetLeft);
+			 console.log(postCardCanvasContext.canvas.offsetTop);
+		 }
+		 **/
 		 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
