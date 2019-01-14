@@ -220,8 +220,6 @@ function init() {
 					 document.getElementById("vidCanvas").style.maxHeight = postCardCanvasContext.canvas.height;
 					 document.getElementById("vidCanvas").style.overflow = "hidden";
 					 
-					 // Source
-					 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
 					 document.getElementById("vidCanvas").style.display = "block";
 					 document.getElementById("go_Back_Button").style.display = "inline";
 					 document.getElementById("postCardCanvas").style.display = "none";
@@ -239,7 +237,8 @@ function init() {
 						 video.srcObject = stream;
 					 }).catch(useNavigatorGetUserMedia()); // In case this fails... call navigator.getUserMedia
 					 
-					 
+					 // navigator.getUserMedia Source
+					 // https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
 					 function useNavigatorGetUserMedia(){
 						 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
 											  navigator.msGetUserMedia || navigator.oGetUserMedia;
@@ -251,7 +250,6 @@ function init() {
 					 
 					 
 					 function handleVideo(stream){
-						 // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
 						 document.querySelector('#vidDisplay').srcObject = stream;
 					 }
 					 
@@ -302,13 +300,10 @@ function init() {
 				 });
 																		
 			 dragControls.addEventListener( 'dragend', function(event)   { });
-																		 
-			 //console.log(dragControls);
-			 //https://www.learnthreejs.com/drag-drop-dragcontrols-mouse/
 	 }
 	 	
 	 /** Load Buttons
-	
+		 Load all the buttons for the Three.js Toolbar
 	 **/
 	 function load_buttons(){
 		 //Load Title
@@ -585,7 +580,7 @@ function init() {
 	 function create_Picture_Image(){
 		 // Source:
 		 // https://stackoverflow.com/questions/23745988/get-an-image-from-the-video
-		 //postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
+		 // postCardCanvasContext.drawImage(document.getElementById("vidDisplay"), 0, 0, postCardCanvas.width, postCardCanvas.height);
 		 
 		 // Now we'll proceed to follow the changes until the current one
 		 for(var x = 1; x< canvasHistoryPointer+1; x++)
@@ -611,7 +606,6 @@ function init() {
 	 }
 	
 	 /** Stops the Webcam
-		 
 		 Source for stopping Media:
 		 https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
 	 **/
@@ -625,60 +619,6 @@ function init() {
 	 }
 	
 	 // Event Section -------------------------------------------
-	 
-	 //Keyboard Functions
-	 function onKeyDown(event) {
-		 /**
-		 if(event.keyCode == 32){
-			 var data = {
-				 subject: "Bendy Postal From Jason",
-				 //text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+downloadingImage+' alt="postCard">',
-				 text : '<h1>Greetings,</h1><p>Wishing you a seasonal greetings.</p> <img src='+postCardCanvas.toDataURL()+' alt="postCard">',
-			 }
-			 
-			 
-			 Postal.emit('Mail',data);
-			 console.log("mail");
-			 //postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
-		 }
-		 //
-		 // postCardCanvasContext.restore();
-		 
-		 //postCardCanvasContext.clearRect(0, 0, postCardCanvas.width, postCardCanvas.height);
-		 
-		 //for(var history = 0; history <canvasHistory.length; history++)
-			 //canvasHistory[history].
-		 
-		 // 
-		 var canvasPic = new Image();
-         canvasPic.src = canvasHistory[0];
-         canvasPic.onload = function () { 
-			 postCardCanvasContext.drawImage(canvasPic, 0, 0);
-			 console.log("--");
-		 }
-		 **/
-		 
-		 if(event.keyCode == 38){
-			 //undo_Canvas_Change();
-			 //create_Fill_Image("#FF0000");
-			 //console.log("Up arrow- pic");
-			 //create_Picture_Image();			 
-		 }
-		 else if(event.keyCode == 40){
-			 //redo_Canvas_Change();				 
-			 
-			 
-			 //postCardCanvas = document.getElementById("postCardCanvas");
-			 //var postCardCanvasContext = postCardCanvas.getContext("2d");
-			 
-		 }
-		 // Are you there
-		 else if(event.keyCode == 32){
-			 
-			 //console.log("ideal width: "+(window.innerWidth*.7));
-		 }
-	 }; 
-	 document.addEventListener('keydown', onKeyDown, false);
 	 
 	 /** On Click Functions for the PostCard Canvas
 		 If the web application status is currently "Text Addition"
