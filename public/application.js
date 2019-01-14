@@ -159,8 +159,9 @@ function init() {
 	 var renderer = new THREE.WebGLRenderer({ antialias: true} );
 	 // create a render and set the size	 
 	 renderer.setClearColor(new THREE.Color(0x000000, 0.0));
-	 // set the size
-	 renderer.setSize( window.innerWidth*.7, 50);	 
+	 // set the size - Hard size for now to stop warping sprites
+	 //renderer.setSize( window.innerWidth*.7, 50);	 
+	 renderer.setSize( 375, 50);	 
 	 renderer.render(scene, camera);
 	 
 	 document.getElementById("postCardToolsCanvas").appendChild(renderer.domElement);
@@ -221,7 +222,7 @@ function init() {
 					 document.getElementById("vidCanvas").style.overflow = "hidden";
 					 
 					 document.getElementById("vidCanvas").style.display = "block";
-					 document.getElementById("go_Back_Button").style.display = "inline";
+					 document.getElementById("go_Back_Button").style.display = "block";
 					 document.getElementById("postCardCanvas").style.display = "none";
 					 document.getElementById("postCardToolsCanvas").style.display = "none";
 					 document.getElementById("colorCanvas").style.display = "none";
@@ -398,7 +399,7 @@ function init() {
 		 T.minFilter = THREE.LinearFilter;
 		 T1 =  new THREE.SpriteMaterial( { map: T, color: 0xffffff } );
 		 var sendButton = new THREE.Sprite(T1);				 
-		 sendButton.posX = 9;
+		 sendButton.posX = 7;
 		 sendButton.posY =  6.5;
 		 sendButton.posZ = 0;
 		 sendButton.position.set(sendButton.posX, sendButton.posY, sendButton.posZ);

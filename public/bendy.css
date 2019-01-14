@@ -48,6 +48,8 @@ body{
 
 #go_Back_Button{
 	 display:none;
+	 margin-left:auto;
+	 margin-right:auto;
 	 border: 3px solid rgb(0,0,95);
 	 background-color: white;
 }
