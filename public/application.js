@@ -145,10 +145,7 @@ function init() {
 	 canvasHistoryPointer++;
  
 	 
-	 // Hello World
-	 //create_Text("Hello World!","20px Georgia", "CYAN", 100, 120);
-	 
-	 /**
+	 /** Future Development Ideas
 	 // Create gradient
 	 var gradient = postCardCanvasContext.createLinearGradient(0, 0, postCardCanvas.width, 0);
 	 gradient.addColorStop("0", "Blue");
@@ -156,9 +153,6 @@ function init() {
 	 gradient.addColorStop("1", "Red");
 	 // Fill with gradient
 	 create_Text("Mwahahahaha!!","30px Verdana", gradient, postCardCanvas.width*0.2, postCardCanvas.height*0.65);
-	 
-	 
-	 
 	 **/
 	 
 	 
@@ -232,9 +226,9 @@ function init() {
 		 var dragControls  = new THREE.DragControls( objects, camera, renderer.domElement );
 				
 			 dragControls.addEventListener( 'dragstart', function(event) {
-				 if (event.object.name == "undo" && webApplicationState == "PostCard Canvas")
+				 if (event.object.name == "undo")
 					 undo_Canvas_Change();
-				 else if (event.object.name == "redo" && webApplicationState == "PostCard Canvas")
+				 else if (event.object.name == "redo")
 					 redo_Canvas_Change();
 				 else if (event.object.name == "background" && webApplicationState == "PostCard Canvas"){
 					 create_Fill_Image('#'+document.getElementById("colorCanvas").jscolor.valueElement.value);
@@ -288,44 +282,29 @@ function init() {
 					 }	
 				 }
 				 else if (event.object.name == "text"){
+					 // If the web application is already in 'Text Addition' mode
 					 if(event.object.ON && webApplicationState == "Text Addition"){
 						 document.getElementById("textToolsCanvas").style.display = "none";
 						 
-						 // Correcting the Buttons
-						 for(var x = 0; x< buttons.length; x++)
+						 // Correcting the Buttons not including the undo/redo buttons
+						 for(var x = 2; x< buttons.length; x++)
 							 buttons[x].material.color.setHex(0xffffff);
-						
-						 // Now check the Undo and Redo Buttons
-						 if(canvasHistoryPointer == 0)
-							 buttons[0].material.color.setHex(0x575757);
-						 else if(canvasHistoryPointer+1 >= canvasHistory.length)
-							 buttons[1].material.color.setHex(0x575757);
 						 
 						 webApplicationState = "PostCard Canvas";
 						 event.object.ON = false;
 					 }
+					 // If the web application is not already in 'Text Addition' mode
 					 else if(webApplicationState == "PostCard Canvas"){
-						 console.log("Text Mode OFF");
-						 
-						 for(var x = 0; x< buttons.length; x++)
+						 // Reducing the color of all the buttons colors except the undo/redo button
+						 for(var x = 2; x< buttons.length; x++)
 							 buttons[x].material.color.setHex(0x575757);
 						 
-						 buttons[4].material.color.setHex(0xffffff);
-						 
+						 buttons[4].material.color.setHex(0xffffff);						 
 						 
 						 webApplicationState = "Text Addition";
 						 event.object.ON = true;
 						 
 						 document.getElementById("textToolsCanvas").style.display = "block";
-						// var text = document.getElementById("textTool").value;
-						 //var fontStyle = document.getElementById("Font Selection").value;
-						 //var fontSize = document.getElementById("Font Size Selection").value;
-						// console.log(text);
-						// console.log(fontStyle);
-						 //console.log(fontSize);
-						 //create_Text(text,fontSize+"px "+fontStyle, '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, Math.floor(Math.random()*postCardCanvas.width*.8)+postCardCanvas.width*.1, Math.floor(Math.random()*postCardCanvas.height*.8)+postCardCanvas.height*.1);
-						 
-					 
 					 }
 				 }
 				 else if (event.object.name == "send" && webApplicationState == "PostCard Canvas"){
@@ -542,11 +521,16 @@ function init() {
 	 **/
 	 function create_Text(text,font, fillStyle, xCord, yCord){		 
 		 // Add Text to Canvas
-		 
 		 postCardCanvasContext.fillStyle = fillStyle;
 		 postCardCanvasContext.font = font;	 
 		 postCardCanvasContext.fillText(text, xCord, yCord);		 
 		 postCardCanvasContext.save();
+		 
+		 // Just in case Splice the canvasHistory to make sure we are creating a new history
+		 canvasHistory.splice(canvasHistoryPointer+1);
+		 // Reset the Buttons
+		 buttons[0].material.color.setHex(0xffffff);
+		 buttons[1].material.color.setHex(0x575757);	
 		 
 		 // Add data into History
 		 var history = {
@@ -729,20 +713,9 @@ function init() {
 			 // console.log(yPos);
 			 
 			 create_Text(""+document.getElementById("textTool").value,
-						 document.getElementById("Font Size Selection").value+"px Arial",
+						 document.getElementById("Font Size Selection").value+"px "+document.getElementById("Font Selection").value,
 						 '#'+document.getElementById("colorCanvas").jscolor.valueElement.value, xPos, yPos);
 		 }
-		 /** Developing the Click Function
-		 else{
-			 console.log("X:"+event.pageX+" Y:"+event.pageY);
-			 console.log(postCardCanvasContext);
-			 //Width
-			 console.log(postCardCanvasContext.canvas.offsetWidth); //**
-			 console.log(postCardCanvasContext.canvas.offsetHeight); //**
-			 console.log(postCardCanvasContext.canvas.offsetLeft);
-			 console.log(postCardCanvasContext.canvas.offsetTop);
-		 }
-		 **/
 		 //https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
 	 }
 	 postCardCanvas.addEventListener('click',onCanvasButtonClick, false);
