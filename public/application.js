@@ -664,7 +664,7 @@ function init() {
 	   
 	 // Window Resize Event
 	 function onWindowResize(){
-		 renderer.setSize(window.innerWidth*.7, 50);
+		 //renderer.setSize(window.innerWidth*.7, 50);
 		 //for ( var x = 0; x<buttons.length; x++){
 			 //buttons[x].position.set(buttons[x].posX, buttons[x].posY, buttons[x].posZ);
 		 // }
