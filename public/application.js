@@ -223,6 +223,7 @@ function init() {
 					 document.getElementById("vidCanvas").style.display = "block";
 					 document.getElementById("go_Back_Button").style.display = "inline";
 					 document.getElementById("postCardCanvas").style.display = "none";
+					 document.getElementById("postCardToolsCanvas").style.display = "none";
 					 document.getElementById("colorCanvas").style.display = "none";
 					 webApplicationState = "WebCam Canvas";
 					 
