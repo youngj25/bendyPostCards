@@ -81,7 +81,27 @@ Additionally a problem that is still persisting, if a users enters an email like
   - Title Image "Bendy Postcards" Source - Flaming Text 
     - Purpose: To give the Web Application a nice title style
     - Website: https://flamingtext.com/logo/Design-Crafts?_variations=true
-    
+### CSS Sheet
+  - Stalling the Font Size Growth
+    - Purpose: Needed the font size to grow/respond but not to rapantly.
+    - Website: https://stackoverflow.com/questions/40528290/how-to-implement-max-font-size */
+### Application (Javascript Code)
+  - Image History Array
+    - Purpose: Allow users to have a redo/undo button. I used this developers method/idea to structure my own.
+    - Website: https://www.codicode.com/art/undo_and_redo_to_the_html5_canvas.aspx
+  - For the function putImageData()
+    - Purpose: Copy the Canvas image (For the Redo/Undo States)
+    - Website: https://www.w3schools.com/tags/canvas_putimagedata.asp
+  - Navigator.mediaDevices.getUserMedia
+    - Purpose: Allow application to use the web cam
+    - Website: https://www.youtube.com/watch?v=Hc7GE3ENz7k
+  - Navigator.getUserMedia
+    - Purpose: Incase Navigator.mediaDevices.getUserMedia incase unavailable for some reason. 
+    - Website: https://www.youtube.com/watch?v=d1SuDVpz6Pk&index=2&list=PL3dbqzwPYj6ttTNmdlZKQ2KV3p6jh9atX
+  - Displaying the Video Stream for 
+    - Purpose
+    - Website: https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
+						
     
     
     
