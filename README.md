@@ -109,8 +109,9 @@ But most of all... to find a way to smoothly way to add the Gradient colors (for
   - Stops the Webcam after the camera is done
     - Purpose: Stops the webcam after the users is done using that feature
     - Website: https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
-    
-    
-    
-    
-
+  - Getting the correct Canvas button click location
+    - Purpose: 
+    - Website: https://stackoverflow.com/a/21693559
+  - Event Listener to the Canvas
+    - Purpse: Add event listeners to the Postcard canvas. Didn't realize at first, is would be the same as Three.js
+    - Website:https://stackoverflow.com/questions/9880279/how-do-i-add-a-simple-onclick-event-handler-to-a-canvas-element#
